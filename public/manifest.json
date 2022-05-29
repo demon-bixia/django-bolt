@@ -1,6 +1,7 @@
+
 {
-  "short_name": "React App",
-  "name": "Create React App Sample",
+  "short_name": "Django Admin",
+  "name": "Django Bolt Admin",
   "icons": [
     {
       "src": "favicon.ico",
