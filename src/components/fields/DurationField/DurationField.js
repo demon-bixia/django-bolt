@@ -15,7 +15,7 @@ const OpenIcon = () => {
 const DurationField = ({
                            field: {attrs, type},
                            value,
-                           dateInputValue,
+                           fieldInputValue,
                            errors,
                            inputProps,
                            onClick,
@@ -29,7 +29,7 @@ const DurationField = ({
                 required={inputProps['required'] || false}
                 components={{OpenPickerIcon: OpenIcon}}
                 label={attrs['label']}
-                value={dateInputValue || ''}
+                value={fieldInputValue || ''}
                 onChange={event => onChange({
                     'formatted': moment(event).format('DD HH:MM:SS'),
                     'default': event

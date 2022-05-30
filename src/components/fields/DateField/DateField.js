@@ -11,7 +11,7 @@ const OpenIcon = () => {
     );
 };
 
-const DateField = ({ field: { attrs, type }, value, dateInputValue, errors, inputProps, onClick, onChange, ...props }) => {
+const DateField = ({ field: { attrs, type }, value, fieldInputValue, errors, inputProps, onClick, onChange, ...props }) => {
 
     return (
         <LocalizationProvider dateAdapter={AdapterDateFns}>
@@ -19,7 +19,7 @@ const DateField = ({ field: { attrs, type }, value, dateInputValue, errors, inpu
                 required={inputProps['required'] || false}
                 components={{ OpenPickerIcon: OpenIcon }}
                 label={attrs['label']}
-                value={dateInputValue || ''}
+                value={fieldInputValue || ''}
                 onChange={(event) => onChange({ 'formatted': moment(event).format('YYYY-MM-DD'), 'default': event }, props.name, 'datePicker')}
                 renderInput={(params) => <TextField
                     {...params}

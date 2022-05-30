@@ -15,7 +15,7 @@ const OpenIcon = () => {
 const DateTimeField = ({
                            field: {attrs, type},
                            value,
-                           dateInputValue,
+                           fieldInputValue,
                            errors,
                            inputProps,
                            onClick,
@@ -28,7 +28,7 @@ const DateTimeField = ({
                 required={inputProps['required'] || false}
                 components={{OpenPickerIcon: OpenIcon}}
                 label={attrs['label']}
-                value={dateInputValue || ''}
+                value={fieldInputValue || ''}
                 onChange={event => onChange({
                     'formatted': moment(event).format('YYYY-MM-DDTHH:mm:ssZ'),
                     'default': event
