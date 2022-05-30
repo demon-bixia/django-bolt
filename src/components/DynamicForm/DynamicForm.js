@@ -63,7 +63,7 @@ const DynamicForm = () => {
                 setValues(fieldValues);
                 setFieldsInputValues(displayFieldValues);
             })
-            .catch(error => console.log(error));
+            .catch(error => console.log(error.response.status));
     }, []);
 
 
@@ -114,14 +114,14 @@ const DynamicForm = () => {
                         errors[key] = value;
                     }
                     setErrors(errors);
-                    console.log(errors);
+                    console.log(error.response.status);
                 }
             });
     };
 
     // populate the fields state variable with DynamicField's
     const formFields = fields ? fields.map((field, index) => {
-        if (['DateField', 'DateTimeField', 'TimeField', 'DurationField', 'FileField'].includes(field.type)) return (
+        if (['DateField', 'DateTimeField', 'TimeField', 'DurationField', 'FileField', 'ImageField'].includes(field.type)) return (
             <FormInput
                 key={index}
                 field={field}

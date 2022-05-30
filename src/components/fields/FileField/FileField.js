@@ -25,7 +25,7 @@ const FileField = ({field: {attrs, type}, errors, value, fieldInputValue, inputP
             {...props}
             label={attrs['label'] || ''}
             error={!!errors}
-            value={fieldInputValue || ''}
+            value={fieldInputValue || 'No File Chosen'}
             helperText={errors ? errors.join('.\n') : attrs['help_text'] || ''}
             inputProps={inputProps}
             onClick={event => {
@@ -38,10 +38,9 @@ const FileField = ({field: {attrs, type}, errors, value, fieldInputValue, inputP
                     <InputAdornment position="start">
                         <IconButton
                             aria-label="toggle password visibility"
-                            edge="end"
-                            component="label"
-                        >
-                            <FeatherIcon icon="file" size={20}/>
+                            disabled
+                            edge="end">
+                            <FeatherIcon icon={type === "ImageField" ? "image" : "file"} size={20}/>
                             <input ref={fileInputRef} type="file" hidden onChange={event => {
                                 if (!event.target.files)
                                     return;
