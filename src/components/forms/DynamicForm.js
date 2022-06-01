@@ -1,8 +1,9 @@
-import DynamicField from "../fields/DynamicField/DynamicField";
-import {useEffect, useState} from "react";
-import client from "../../client";
+import DynamicField from "../fields/DynamicField";
+import {useContext, useEffect, useState} from "react";
 import {styled} from "@mui/system";
 import moment from "moment";
+import AuthContext from "../contexts/AuthContext";
+import client from "../../client";
 
 const FormInput = styled(DynamicField)(({theme}) => ({
     marginBottom: theme.spacing(5),
@@ -15,13 +16,23 @@ const DynamicForm = ({formUrl, FormComponent, ...props}) => {
     const [errors, setErrors] = useState({});
     const [nonFieldErrors, setNonFieldErrors] = useState([])
 
+    // get the csrftoken to make post requests
+    const auth = useContext(AuthContext);
+
     // independent value to display in DateFields form inputs
     const [fieldsInputValues, setFieldsInputValues] = useState('');
     const [contentType, setContentType] = useState('application/json');
 
+    let headers = {
+        'Content-Type': contentType,
+    };
+
+    if (auth.csrfToken)
+        headers['X-CSRFToken'] = auth.csrfToken
+
     // fetch all fields and set the default values
     useEffect(() => {
-        client.get(formUrl)
+        client.get(formUrl, {headers: headers})
             .then((response) => {
                 setFields(response.data['fields'])
                 let displayFieldValues = {};
@@ -62,8 +73,11 @@ const DynamicForm = ({formUrl, FormComponent, ...props}) => {
                 setValues(fieldValues);
                 setFieldsInputValues(displayFieldValues);
             })
-            .catch(error => console.log(error.response));
-    }, [formUrl]);
+            .catch(error => {
+                console.log(error.response)
+            });
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     const handleValuesChange = (event, field_name, type = "") => {
         if (type === "checkbox") {
@@ -98,14 +112,14 @@ const DynamicForm = ({formUrl, FormComponent, ...props}) => {
             data = values
         }
 
-        return client.post(formUrl, data, {headers: {'Content-Type': contentType}})
+        return client.post(formUrl, data, {headers: headers})
             .then(response => {
                 console.log(response);
                 return response;
             })
             .catch(error => {
                 // log error
-                //console.log(error.response);
+                console.log(error.response);
 
                 // if there are non_field_errors set them
                 setNonFieldErrors(error.response.data['non_field_errors'] || [])
@@ -118,6 +132,7 @@ const DynamicForm = ({formUrl, FormComponent, ...props}) => {
                     }
                     setErrors(errors);
                 }
+                return error.response;
             });
     };
 

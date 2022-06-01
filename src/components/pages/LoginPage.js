@@ -1,6 +1,6 @@
 import {styled} from "@mui/system";
-import DynamicForm from "../DynamicForm/DynamicForm";
-import LoginForm from "../LoginForm/LoginForm";
+import DynamicForm from "../forms/DynamicForm";
+import LoginForm from "../forms/LoginForm";
 
 const Layout = styled("main")(({theme}) => ({
     height: "100vh",

@@ -1,12 +1,12 @@
-import PasswordField from "../PasswordField/PasswordField";
-import CharField from "../CharField/CharField";
-import ChoiceField from "../ChoiceField/ChoiceField";
-import BooleanField from "../BooleanField/BooleanField";
-import DateField from "../DateField/DateField";
-import DateTimeField from "../DateTimeField/DateTimeField";
-import TimeField from "../TimeField/TimeField";
-import DurationField from "../DurationField/DurationField";
-import FileField from "../FileField/FileField";
+import PasswordField from "./PasswordField";
+import CharField from "./CharField";
+import ChoiceField from "./ChoiceField";
+import BooleanField from "./BooleanField";
+import DateField from "./DateField";
+import DateTimeField from "./DateTimeField";
+import TimeField from "./TimeField";
+import DurationField from "./DurationField";
+import FileField from "./FileField";
 
 // map serializer fields names with mui Input Components
 const getFormForSerializerField = ({type, attrs}) => {

@@ -2,7 +2,7 @@ import {useState} from "react";
 import InputAdornment from "@mui/material/InputAdornment";
 import IconButton from "@mui/material/IconButton";
 import FeatherIcon from "feather-icons-react";
-import CharField from "../CharField/CharField";
+import CharField from "./CharField";
 
 const PasswordField = (props) => {
     const [showPassword, setShowPassword] = useState(false);
