@@ -84,7 +84,7 @@ function LoginForm({context: {responseError, nonFieldErrors}, formFields, onSubm
     const auth = useContext(SiteContext);
 
     return (<PaperBackground elevation={7}>
-        <Image src={AdminLogo} alt="AdminLogo"/>
+        <Image src={AdminLogo} alt="Bolt logo"/>
         <Title variant="h3">Hi Welcome back</Title>
         <HelperText variant="body2">Enter your credentials to continue</HelperText>
         <Collapse in={nonFieldErrors.length > 0} sx={{width: '100%'}}>

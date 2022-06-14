@@ -111,25 +111,17 @@ const SidebarApplicationList = styled(SidebarActionList)(({theme}) => ({
     },
 }));
 
-let MOCKAPPDATA = [{
-    "name": "Blog", "models": [{"name": "Authors"}, {"name": "Publishers"}, {"name": "Editors"}, {"name": "Posts"}],
-}, {
-    "name": "Authentication And Authorization", "models": [{"name": "Groups"}, {"name": "Users"}],
-}, {
-    "name": "Messenger", "models": [{"name": "Conversations"}]
-}];
 
-const Sidebar = () => {
+const Sidebar = ({appList}) => {
     const [open, setOpen] = useState(true);
-    const [applications, setApplications] = useState(MOCKAPPDATA);
     const [applicationMenuCollapse, setApplicationMenuCollapse] = useState({});
     const theme = useTheme();
 
     useEffect(() => {
         let collapseList = {};
-        for (let application of applications) collapseList[application.name] = false;
+        for (let app of appList) collapseList[app.name] = false;
         setApplicationMenuCollapse(collapseList);
-    }, []);
+    }, [appList]);
 
     const handleToggleCollapse = (app_name) => {
         setApplicationMenuCollapse({
@@ -143,7 +135,7 @@ const Sidebar = () => {
 
     return (<Drawer variant="permanent" open={open}>
         <DrawerHeader>
-            <Logo sx={{display: open ? "initial": "none"}}>
+            <Logo sx={{display: open ? "initial" : "none"}}>
                 <img src={AdminLogo} alt="Bolt logo" id="admin-logo"/>
             </Logo>
             <IconButton onClick={handleDrawerToggle}>
@@ -171,7 +163,7 @@ const Sidebar = () => {
 
         <SidebarApplicationList sx={{display: open ? 'auto' : 'none'}}
                                 subheader={<ListSubheader disableSticky={true}>Applications</ListSubheader>}>
-            {applications.map((app) => (<ListItem sx={{display: 'block'}} key={app.name}>
+            {appList.map((app) => (<ListItem sx={{display: 'block'}} key={app.name}>
                 <ListItemButton
                     className="main-menu-item" onClick={() => handleToggleCollapse(app.name)}
                     sx={{justifyContent: open ? 'start' : 'center'}}>
@@ -179,7 +171,7 @@ const Sidebar = () => {
                     <FeatherIcon icon={applicationMenuCollapse[app.name] ? "chevron-down" : "chevron-right"}/>
                 </ListItemButton>
 
-                {applications ? (<Collapse in={applicationMenuCollapse[app.name]} timeout="auto" unmountOnExit>
+                {appList ? (<Collapse in={applicationMenuCollapse[app.name]} timeout="auto" unmountOnExit>
                     <List component="div" disablePadding sx={{display: open ? 'auto' : 'none'}}>
                         {app.models.map((model) => (<ListItemButton
                             className="sub-menu-item"

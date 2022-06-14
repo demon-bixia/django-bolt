@@ -2,7 +2,7 @@ import {styled} from "@mui/system";
 import DynamicForm from "../forms/DynamicForm";
 import LoginForm from "../forms/LoginForm";
 
-const Layout = styled("main")(({theme}) => ({
+const Layout = styled("div")(({theme}) => ({
     height: "100vh",
     width: "100%",
     display: "flex",

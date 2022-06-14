@@ -1,12 +1,12 @@
 import {ThemeProvider} from '@mui/material/styles';
 import {overrides} from "./theme";
 import CssBaseline from "@mui/material/CssBaseline";
-import {Route, Routes} from "react-router-dom";
-import AuthRoutes from "./components/utils/AuthRoutes";
-import LoginPage from "./components/pages/LoginPage";
-import ProtectedRoutes from "./components/utils/ProtectedRoutes";
+//import {Route, Routes} from "react-router-dom";
+//import AuthRoutes from "./components/utils/AuthRoutes";
+//import LoginPage from "./components/pages/LoginPage";
+//import ProtectedRoutes from "./components/utils/ProtectedRoutes";
 import IndexPage from "./components/pages/IndexPage";
-import {AuthProvider} from "./components/contexts/AuthContext";
+//import {AuthProvider} from "./components/contexts/AuthContext";
 
 function App() {
 
@@ -14,6 +14,7 @@ function App() {
         <div className="App">
             <ThemeProvider theme={overrides}>
                 <CssBaseline/>
+                {/*
                 <AuthProvider>
                     <Routes>
                         <Route element={<AuthRoutes/>}>
@@ -25,6 +26,8 @@ function App() {
                         </Route>
                     </Routes>
                 </AuthProvider>
+                */}
+                <IndexPage/>
             </ThemeProvider>
         </div>
     );

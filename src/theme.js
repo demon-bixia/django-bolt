@@ -79,8 +79,8 @@ export const themeValues = {
     ],
 
     // spacing system
-    //        0,  1,    2,     3,     4,      5,      6,      7,       8,     9,     10,     11,      12,     13
-    spacing: [0, "2px", "4px", "8px", "12px", "16px", "24px", "32px", "40px", "48px", "64px", "80px", "96px", "160px"],
+    //        0, 1, 2, 3, 4,  5,  6,  7,  8,  9,  10, 11, 12, 13
+    spacing: [0, 2, 4, 8, 12, 16, 24, 32, 40, 48, 64, 80, 96, 160],
 
     // fonts
     typography: {
@@ -159,7 +159,6 @@ export const themeValues = {
 
 export const overrides = createTheme({
     ...themeValues,
-
     //component overrides
     components: {
         MuiAlert: {
@@ -181,6 +180,24 @@ export const overrides = createTheme({
                 },
 
             }
-        }
+        },
+
+        MuiCssBaseline: {
+            styleOverrides: {
+                "*::-webkit-scrollbar": {
+                    width: '0.4em',
+                },
+                "*::-webkit-scrollbar-track": {
+                    'WebkitBoxShadow': 'inset 0 0 6px rgba(0,0,0,0.00)',
+
+
+                },
+                "*::-webkit-scrollbar-thumb": {
+                    backgroundColor: '#E0E0E0',
+                    outline: '0px',
+                    borderRadius: '4px',
+                }
+            }
+        },
     },
 });

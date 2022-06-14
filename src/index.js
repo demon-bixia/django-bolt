@@ -4,6 +4,14 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import {BrowserRouter} from "react-router-dom";
 
+/*
+* todo: create the index page.
+* todo: create the change list page.
+* todo: create the add/change forms.
+* todo: make site customizable from server.
+* todo: add widgets support (e.g charts, lists, bookmarks).
+* */
+
 ReactDOM.render(
     <React.StrictMode>
         <BrowserRouter>
