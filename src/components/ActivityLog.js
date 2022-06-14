@@ -50,7 +50,7 @@ const ActivityLog = ({actionList}) => {
                 </Link>
             </Box>
             {actionList.map((action, index) => (
-                <Box sx={{display: 'flex', marginBottom: theme.spacing(5),}}>
+                <Box key={action.id} sx={{display: 'flex', marginBottom: theme.spacing(5),}}>
                     <Box sx={{
                         width: '40px',
                         height: '40px',

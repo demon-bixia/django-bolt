@@ -1,15 +1,10 @@
-import {styled} from "@mui/system";
+import {useTheme} from "@mui/system";
 import Sidebar from "../Sidebar";
 import Applications from "../Applications";
 import ActivityLog from "../ActivityLog";
 import {useState} from "react";
-
-
-const Layout = styled("div")(({theme}) => ({
-    padding: theme.spacing(5),
-    margin: 0,
-    display: "flex",
-}));
+import TopMenu from "../TopMenu";
+import Box from '@mui/material/Box';
 
 let MOCKAPPDATA = [
     {
@@ -26,7 +21,7 @@ let MockActionData = [
         "id": 1,
         "action_time": "2021-09-14T11:38:26.581543Z",
         "object_repr": "Demonic Emperor",
-        "change_message": [{"added": {"name": "author","object": "Demonic Emperor"}}],
+        "change_message": [{"added": {"name": "author", "object": "Demonic Emperor"}}],
         "user": {'username': 'muhammad'},
         "action": "add",
     },
@@ -56,16 +51,31 @@ let MockActionData = [
     },
 ];
 
+let USERMOCKDATA = {'username': 'Muhammad'};
+
 const IndexPage = () => {
     const [appList, setAppList] = useState(MOCKAPPDATA);
     const [actionList, setActionList] = useState(MockActionData)
+    const [user, setUser] = useState(USERMOCKDATA);
+    const theme = useTheme();
 
     return (
-        <Layout>
+        <Box sx={{padding: theme.spacing(5), display: "flex",}}>
             <Sidebar appList={appList}/>
-            <Applications appList={appList}/>
-            <ActivityLog actionList={actionList}/>
-        </Layout>
+            <Box sx={{display: "flex", flexGrow: 1, marginTop: theme.spacing(2)}}>
+                <Box sx={{flexGrow: 1}}>
+                    <Applications appList={appList}/>
+                </Box>
+                <Box sx={{display: 'flex', flexDirection: "column"}}>
+                    <Box sx={{marginBottom:theme.spacing(6), alignSelf: 'end'}}>
+                        <TopMenu user={user}/>
+                    </Box>
+                    <Box>
+                        <ActivityLog actionList={actionList}/>
+                    </Box>
+                </Box>
+            </Box>
+        </Box>
     );
 };
 

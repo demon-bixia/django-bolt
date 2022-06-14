@@ -68,10 +68,12 @@ const Applications = ({appList}) => {
                                 display: "flex",
                                 alignItems: "center",
                             }}>
-                                <Link href="#" underline="none" variant="body1"
-                                      sx={{color: theme.palette.text.secondary, flexGrow: 1,}}>
-                                    {model.name}
-                                </Link>
+                                <Box sx={{flexGrow: 1,}}>
+                                    <Link href="#" underline="none" variant="body1"
+                                          sx={{color: theme.palette.text.secondary}}>
+                                        {model.name}
+                                    </Link>
+                                </Box>
                                 <IconButton aria-controls={menuToggles[model_name] ? 'model-menu' : undefined}
                                             aria-expanded={menuToggles[model_name] ? 'true' : undefined}
                                             aria-haspopup="true"
