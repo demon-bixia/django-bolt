@@ -4,12 +4,12 @@ import Typography from "@mui/material/Typography";
 import Alert from "@mui/material/Alert";
 import {styled} from '@mui/system';
 import FeatherIcon from "feather-icons-react";
-import AdminLogo from "../../assets/logo/admin-logo-filled.svg";
+import AdminLogo from "../../../assets/logo/admin-logo-filled.svg";
 import AlertTitle from '@mui/material/AlertTitle';
 import Collapse from '@mui/material/Collapse';
 import {useLocation, useNavigate} from "react-router";
 import {useContext} from "react";
-import SiteContext from "../contexts/AuthContext";
+import SiteContext from "../../contexts/AuthContext";
 import Cookies from "js-cookie"
 
 const PaperBackground = styled(Paper)(({theme}) => ({

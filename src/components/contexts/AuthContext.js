@@ -4,7 +4,7 @@ import {useNavigate} from "react-router";
 import {useLocation} from "react-router-dom";
 import client from "../../client";
 import config from "../../config";
-import Preloader from "../Preloader";
+import Preloader from "../utils/Preloader";
 
 const AuthContext = createContext();
 

@@ -9,7 +9,7 @@ import {BrowserRouter} from "react-router-dom";
 * todo: create the change list page.
 * todo: create the add/change forms.
 * todo: make site customizable from server.
-* todo: add widgets support (e.g charts, lists, bookmarks).
+* todo: add dashboard widgets support (e.g charts, lists, bookmarks).
 * */
 
 ReactDOM.render(

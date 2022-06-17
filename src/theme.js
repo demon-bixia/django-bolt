@@ -28,7 +28,7 @@ export const themeValues = {
             primary: "#424242", secondary: "#9E9E9E", disabled: "#E0E0E0"
         },
 
-        border: "rgba(0, 0, 0, 0.23)",
+        border: "#EEEEEE",
 
         background: {
             default: "#FAFAFA", paper: "#FFFFFF"
@@ -93,9 +93,7 @@ export const themeValues = {
             fontSize: "12px",
             lineHeight: "18px",
             letterSpacing: "0.16px",
-        },
-
-        body1: {
+        }, body1: {
             fontFamily: ["IBM Plex Sans", "Helvetica Neue", "Arial", "sans-serif"].join(','),
             fontWeight: 400,
             fontSize: "14px",
@@ -107,16 +105,13 @@ export const themeValues = {
             fontSize: "16px",
             lineHeight: "22px",
             letterSpacing: 0
-        },
-        body3: {
+        }, body3: {
             fontFamily: ["IBM Plex Sans", "Helvetica Neue", "Arial", "sans-serif"].join(','),
             fontWeight: 300,
             fontSize: "12px",
             lineHeight: "16px",
             letterSpacing: "0.16px",
-        },
-
-        button: {
+        }, button: {
             fontFamily: ["IBM Plex Sans", "Helvetica Neue", "Arial", "sans-serif"].join(','),
             fontWeight: 600,
             fontSize: "14px",

@@ -1,4 +1,4 @@
-import DynamicField from "../fields/DynamicField";
+import DynamicField from "./fields/DynamicField";
 import {useContext, useEffect, useState} from "react";
 import {styled} from "@mui/system";
 import moment from "moment";
