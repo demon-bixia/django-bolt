@@ -88,7 +88,7 @@ const Toolbar = ({appList, open, type}) => {
             subheader={<ListSubheader
                 disableSticky={true}
                 sx={{display: conditionalStyle((open ? 'auto' : 'none'), "auto")}}>Actions</ListSubheader>}>
-            {[{"text": "Home", "icon": "home"}, {
+            {[{"text": "HomePage", "icon": "home"}, {
                 "text": "View site", "icon": "external-link"
             }, {"text": "Documentation", "icon": "book"}, {
                 "text": "activity", "icon": "activity"
@@ -105,36 +105,38 @@ const Toolbar = ({appList, open, type}) => {
             </ListItem>))}
         </SidebarActionList>
 
-        <SidebarApplicationList sx={{
-            display: conditionalStyle((open ? 'auto' : 'none'), 'auto'),
-            margin: conditionalStyle(theme.spacing(0, 5, 5, 5), theme.spacing(1))
-        }}
-                                subheader={<ListSubheader disableSticky={true}>Applications</ListSubheader>}>
-            {appList.map((app) => (<ListItem sx={{display: 'block'}} key={app.name}>
-                <ListItemButton
-                    className="main-menu-item" onClick={() => handleToggleCollapse(app.name)}
-                    sx={{justifyContent: conditionalStyle((open ? 'start' : 'center'), 'start')}}>
-                    <ListItemText primary={app.name}/>
-                    <FeatherIcon icon={applicationMenuCollapse[app.name] ? "chevron-down" : "chevron-right"}
-                                 size={16}/>
-                </ListItemButton>
+        {appList.length <= 0 ? null :
+            <SidebarApplicationList sx={{
+                display: conditionalStyle((open ? 'auto' : 'none'), 'auto'),
+                margin: conditionalStyle(theme.spacing(0, 5, 5, 5), theme.spacing(1))
+            }}
+                                    subheader={<ListSubheader disableSticky={true}>Applications</ListSubheader>}>
+                {appList.map((app) => (<ListItem sx={{display: 'block'}} key={app.name}>
+                    <ListItemButton
+                        className="main-menu-item" onClick={() => handleToggleCollapse(app.name)}
+                        sx={{justifyContent: conditionalStyle((open ? 'start' : 'center'), 'start')}}>
+                        <ListItemText primary={app.name}/>
+                        <FeatherIcon icon={applicationMenuCollapse[app.name] ? "chevron-down" : "chevron-right"}
+                                     size={16}/>
+                    </ListItemButton>
 
-                {appList ? (<Collapse in={applicationMenuCollapse[app.name]} timeout="auto" unmountOnExit>
-                    <List component="div" disablePadding
-                          sx={{display: conditionalStyle((open ? 'auto' : 'none'), "auto")}}>
-                        {app['models'].map((model) => (<ListItemButton
-                            className="sub-menu-item"
-                            key={model.name}
-                            sx={{pl: 4, justifyContent: conditionalStyle((open ? 'start' : 'center'), "start")}}>
-                            <ListItemIcon
-                                sx={{mr: conditionalStyle((open ? theme.spacing(3) : 'auto'), theme.spacing(3))}}><span
-                                className="dot"></span></ListItemIcon>
-                            <ListItemText primary={model.name}/>
-                        </ListItemButton>))}
-                    </List>
-                </Collapse>) : null}
-            </ListItem>))}
-        </SidebarApplicationList>
+                    {appList ? (<Collapse in={applicationMenuCollapse[app.name]} timeout="auto" unmountOnExit>
+                        <List component="div" disablePadding
+                              sx={{display: conditionalStyle((open ? 'auto' : 'none'), "auto")}}>
+                            {app['models'].map((model) => (<ListItemButton
+                                className="sub-menu-item"
+                                key={model.name}
+                                sx={{pl: 4, justifyContent: conditionalStyle((open ? 'start' : 'center'), "start")}}>
+                                <ListItemIcon
+                                    sx={{mr: conditionalStyle((open ? theme.spacing(3) : 'auto'), theme.spacing(3))}}><span
+                                    className="dot"></span></ListItemIcon>
+                                <ListItemText primary={model.name}/>
+                            </ListItemButton>))}
+                        </List>
+                    </Collapse>) : null}
+                </ListItem>))}
+            </SidebarApplicationList>
+        }
     </>);
 };
 

@@ -5,8 +5,7 @@ import AuthContext from "../contexts/AuthContext";
 const AuthRoutes = () => {
     const auth = useContext(AuthContext);
 
-    // if the authToken exists leave the login page
-    if (auth.authToken)
+    if (auth.user)
         return (<Navigate to="/" replace/>);
 
     return (

@@ -11,13 +11,13 @@ import FileField from "./FileField";
 // map serializer fields names with mui Input Components
 const getFormForSerializerField = ({type, attrs}) => {
     // if choices exist use choice fields
-    if (["ChoiceField", "MultipleChoiceField"].includes(type) || attrs['choices'])
+    if (["ChoiceField", "MultipleChoiceField", "FilePathField"].includes(type) || attrs['choices'])
         return ChoiceField;
     // special case for password field
     else if (type === "CharField" && attrs['style']['input_type'] === "password")
         return PasswordField;
     else if (["CharField", "EmailField", "RegexField", "SlugField", "URLField",
-        "UUIDField", "IPAddressField", "IntegerField", "FloatField", "DecimalField"].includes(type))
+        "UUIDField", "IPAddressField", "IntegerField", "FloatField", "DecimalField", 'JSONField'].includes(type))
         return CharField;
     else if (["BooleanField", "NullBooleanField"].includes(type))
         return BooleanField;
@@ -31,6 +31,8 @@ const getFormForSerializerField = ({type, attrs}) => {
         return DurationField;
     else if (["FileField", "ImageField"].includes(type))
         return FileField;
+    else
+        throw new Error(`${type} is not supported`)
 
 };
 

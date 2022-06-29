@@ -103,9 +103,9 @@ function LoginForm({context: {responseError, nonFieldErrors}, formFields, onSubm
             removeNonFieldErrors();
             onSubmit(event).then(response => {
                 if (response.status === 200) {
-                    // if successfully authenticated set the token
-                    auth.setAuthToken(response.data['token']);
-                    Cookies.set('authToken', response.data['token'], {expires: new Date(response.data['expiry'])})
+                    // if successfully authenticated set the user
+                    auth.setUser(response.data['user']);
+                    Cookies.set('bolt-user', JSON.stringify(response.data['user']))
 
                     // then redirect to the route the client came from
                     if (location.state?.from) {

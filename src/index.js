@@ -5,9 +5,13 @@ import reportWebVitals from './reportWebVitals';
 import {BrowserRouter} from "react-router-dom";
 
 /*
-* todo: create the index page.
+* core features:
 * todo: create the change list page.
-* todo: create the add/change forms.
+* todo: create the admin activity page
+* todo: create the history view page.
+* todo: create the add/change pages.
+* todo: optimize accessibility.
+* more features:
 * todo: make site customizable from server.
 * todo: add dashboard widgets support (e.g charts, lists, bookmarks).
 * */
