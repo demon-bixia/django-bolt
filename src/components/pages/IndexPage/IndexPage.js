@@ -1,52 +1,51 @@
-import {styled} from "@mui/system";
-import Sidebar from "./Sidebar";
-import React, {useContext, useEffect, useState} from "react";
 import Box from '@mui/material/Box';
-import {Outlet} from "react-router-dom";
+import { styled } from "@mui/system";
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { Outlet } from "react-router-dom";
+import { selectUser } from "../../AuthProvider/authProvidertSlice";
+import { fetchActionList, fetchAppList, selectAllActions, selectAllApps, selectStatus } from "./indexPageSlice";
+import Sidebar from "./Sidebar";
 import Topbar from "./Topbar";
-import client from "../../../client";
-import AuthContext from "../../contexts/AuthContext";
 
-const Layout = styled(Box)(({theme}) => ({
+const Layout = styled(Box)(({ theme }) => ({
     padding: theme.spacing(0), display: "flex", boxSizing: 'border-box',
 }));
 
-const VerticalWrap = styled(Box)(({theme}) => ({
-    display: "flex", flexDirection: "column", flexGrow: 1
+const VerticalWrap = styled(Box)(({ theme }) => ({
+    display: "flex", flexDirection: "column", flexGrow: 1,
+    margin: theme.spacing(6, 7, 0, 7),
+
+    [theme.breakpoints.down("md")]: {
+        margin: theme.spacing(11, 5, 5, 5),
+    }
 }));
 
 const IndexPage = (props) => {
-    const [appList, setAppList] = useState([]);
-    const [actionList, setActionList] = useState([]);
-    const [loading, setLoading] = useState(true);
-    const auth = useContext(AuthContext);
+    const appList = useSelector(selectAllApps);
+    const actionList = useSelector(selectAllActions);
+    const status = useSelector(selectStatus);
+    const user = useSelector(selectUser);
+    const dispatch = useDispatch();
 
     useEffect(() => {
-        client.get('/index/')
-            .then(response => {
-                setAppList(response.data['app_list']);
-            })
-            .then(() => {
-                client.get('/admin_log/')
-                    .then(response => setActionList(response.data['action_list']))
-                    .catch(error => console.log(error))
-            })
-            .then(() => {
-                if (loading) setLoading(false);
-            })
-            .catch(error => console.log(error))
-    }, [])
+        if (status === 'idle') {
+            dispatch(fetchActionList());
+            dispatch(fetchAppList());
+        }
+    }, []);
+
 
     return (
-        loading
-            ? null
-            : <Layout>
-                <Sidebar appList={appList}/>
+        status === 'success' || status === 'failure'
+            ? <Layout>
+                <Sidebar appList={appList} />
+                <Topbar appList={appList} />
                 <VerticalWrap>
-                    <Topbar appList={appList}/>
-                    <Outlet context={{appList: appList, actionList: actionList, user: auth.user}}/>
+                    <Outlet context={{ appList: appList, actionList: actionList, user: user }} />
                 </VerticalWrap>
             </Layout>
+            : null
     );
 };
 

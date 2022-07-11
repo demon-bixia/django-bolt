@@ -1,8 +1,8 @@
-import {styled} from "@mui/system";
-import DynamicForm from "../../forms/DynamicForm";
+import { styled } from "@mui/system";
+import DynamicForm from "../../DynamicForm/DynamicForm";
 import LoginForm from "./LoginForm";
 
-const Layout = styled("div")(({theme}) => ({
+const Layout = styled("div")(({ theme }) => ({
     height: "100vh",
     width: "100%",
     display: "flex",
@@ -14,9 +14,10 @@ const Layout = styled("div")(({theme}) => ({
 }));
 
 const LoginPage = () => {
+
     return (
         <Layout component="main">
-            <DynamicForm formUrl='/login/' FormComponent={LoginForm}/>
+            <DynamicForm formUrl='/login/' FormComponent={LoginForm} />
         </Layout>
     );
 };

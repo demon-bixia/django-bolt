@@ -1,28 +1,21 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
+import ReactDOM from "react-dom/client";
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-import {BrowserRouter} from "react-router-dom";
+import { BrowserRouter } from "react-router-dom";
+import { Provider } from 'react-redux'
+import store from "./application/store";
 
-/*
-* core features:
-* todo: create the change list page.
-* todo: create the admin activity page
-* todo: create the history view page.
-* todo: create the add/change pages.
-* todo: optimize accessibility.
-* more features:
-* todo: make site customizable from server.
-* todo: add dashboard widgets support (e.g charts, lists, bookmarks).
-* */
 
-ReactDOM.render(
+const root = ReactDOM.createRoot(document.getElementById("root"));
+root.render(
     <React.StrictMode>
-        <BrowserRouter>
-            <App/>
-        </BrowserRouter>
-    </React.StrictMode>,
-    document.getElementById('root')
+        <Provider store={store}>
+            <BrowserRouter>
+                <App />
+            </BrowserRouter>
+        </Provider>
+    </React.StrictMode>
 );
 
 // If you want to start measuring performance in your app, pass a function
