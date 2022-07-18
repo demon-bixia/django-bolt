@@ -1,6 +1,6 @@
 import { Navigate, Outlet } from "react-router-dom";
 import { useSelector } from "react-redux";
-import { selectUser } from "../../AuthProvider/authProvidertSlice";
+import { selectUser } from "../../AuthProvider";
 
 const AuthRoutes = () => {
     const user = useSelector(selectUser);

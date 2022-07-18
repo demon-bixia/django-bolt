@@ -9,6 +9,8 @@ import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import { useEffect, useState } from "react";
 import Pagination from '@mui/material/Pagination';
+import { Link as RouterLink } from "react-router-dom";
+
 
 const ApplicationListWrap = styled(Box)(({ theme }) => ({
     width: 'auto', flexGrow: 1,
@@ -18,7 +20,7 @@ const ApplicationListWrap = styled(Box)(({ theme }) => ({
     },
 }));
 
-const VirticalWrap = styled(Box)(({ theme }) => ({
+const VerticalWrap = styled(Box)(({ theme }) => ({
     maxWidth: "400px", display: 'flex', flexDirection: "column", [theme.breakpoints.down("md")]: {
         maxWidth: "initial",
     },
@@ -91,21 +93,27 @@ const Applications = ({ appList }) => {
     let filteredAppList = appList.filter((app, index) => ((index >= startingItemIndex) && (index < startingItemIndex + page_size)))
 
     return (<ApplicationListWrap>
-        <VirticalWrap>
+        <VerticalWrap>
             <ApplicationList className="applications-list" role="main">
                 {/* list of apps */}
                 {filteredAppList.map((app, index) => (
                     <Application className="application" key={app.name} role="list">
-                        <Typography tabIndex={0} variant="h5" sx={{ fontWeight: "500", marginBottom: theme.spacing(5), }} >
+                        <Typography underline="none" tabIndex={0} variant="h5" sx={{ fontWeight: "500", marginBottom: theme.spacing(5), }} >
                             {app.name.replace(/_/g, ' ')}
                         </Typography>
+
+                        {/* list of models */}
                         {app.models.map((model) => {
                             let model_name = `${app.name}_${model.name}`;
+
                             return (<Model key={model_name} elevation={0} role="listitem">
                                 <Box sx={{ flexGrow: 1, }}>
-                                    <Link href="#" aria-label={model.name}
-                                        underline="none" variant="body1"
-                                        sx={{ color: theme.palette.text.secondary }}>
+                                    <Link
+                                        aria-label={model.name}
+                                        underline="none" variant="body1" component={RouterLink}
+                                        sx={{ color: theme.palette.text.secondary }}
+                                        to={`/${app.app_label}/${model.name}/changelist/`}
+                                    >
                                         {model.name}
                                     </Link>
                                 </Box>
@@ -159,7 +167,7 @@ const Applications = ({ appList }) => {
                         onChange={handlePageChange} variant="outlined" shape="rounded" />)
             }
 
-        </VirticalWrap>
+        </VerticalWrap>
     </ApplicationListWrap>);
 };
 

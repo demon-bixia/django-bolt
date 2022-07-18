@@ -1,14 +1,14 @@
+import { Link } from "@mui/material";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import FormControl from "@mui/material/FormControl";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import FormLabel from '@mui/material/FormLabel';
+import Listitem from "@mui/material/ListItem";
 import ListSubheader from '@mui/material/ListSubheader';
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import MenuList from '@mui/material/MenuList';
-import Listitem from "@mui/material/ListItem";
-import Paper from "@mui/material/Paper";
 import Radio from '@mui/material/Radio';
 import RadioGroup from "@mui/material/RadioGroup";
 import TextField from '@mui/material/TextField';
@@ -16,6 +16,7 @@ import Typography from "@mui/material/Typography";
 import { styled, useTheme } from "@mui/system";
 import FeatherIcon from "feather-icons-react";
 import { useState } from "react";
+
 
 const ChevronDown = () => {
     return (<FeatherIcon icon="chevron-down" size={24} />)
@@ -30,13 +31,31 @@ const TableToolbarWrap = styled(Box)(({ theme }) => ({
     '.feather': {
         color: theme.palette.grey[300],
         strokeWidth: '1.5px',
-    }
-}));
-
-const TableTitle = styled(Typography)(({ theme }) => ({
+    },
 
     [theme.breakpoints.down("md")]: {
-        display: 'none',
+        flexDirection: 'column',
+    },
+}));
+
+const TableTitleWrap = styled(Box)(({ theme }) => ({
+    display: 'flex',
+    justifyContent: 'start',
+    alignItems: 'center',
+    flexGrow: 1,
+
+    [theme.breakpoints.down("md")]: {
+        width: '100%',
+        marginBottom: theme.spacing(5),
+    },
+}));
+
+const ToolbarActionWrap = styled(Box)(({ theme }) => ({
+    display: 'flex',
+    [theme.breakpoints.down("md")]: {
+        flexGrow: 1,
+        width: '100%',
+
     },
 }));
 
@@ -126,7 +145,7 @@ const ToolbarActionButton = styled(ToolbarFilterButton)(({ theme }) => ({
     border: 'none'
 }));
 
-const FilterMenu = ({ open, filters, filtersValues, handleChange, anchorEl, handleClose }) => {
+const FilterMenu = ({ open, filters_list, filters, handleChange, anchorEl, handleClose }) => {
     const theme = useTheme();
 
     return (
@@ -139,37 +158,38 @@ const FilterMenu = ({ open, filters, filtersValues, handleChange, anchorEl, hand
                 vertical: 'top',
                 horizontal: 'left',
             }}>
-            <Paper sx={{ width: "200px" }}>
-                <MenuList subheader={
-                    <ListSubheader component="div" id="nested-list-subheader" sx={{ color: theme.palette.text.primary, fontWeight: '400' }}>
-                        Filters
-                    </ListSubheader>
-                }>
-                    {
-                        filters.map((filter) => {
-                            let name = `filter_by_${filter}`;
+            <MenuList subheader={
+                <ListSubheader component="div" id="nested-list-subheader" sx={{ color: theme.palette.text.primary, fontWeight: '400' }}>
+                    Filters
+                </ListSubheader>}
+                sx={{ height: "350px", width: "190px" }}
+            >
+                {
+                    filters_list.map((filter) => {
+                        let name = `filter_by_${filter.title}`;
 
-                            return (
-                                <Listitem key={name}>
-                                    <FormControl>
-                                        <FormLabel id={name}>{name.replace(/_/g, ' ')}</FormLabel>
-                                        <RadioGroup
-                                            aria-labelledby={name}
-                                            name={name}
-                                            value={filtersValues[name]}
-                                            onChange={handleChange}
-                                        >
-                                            <FormControlLabel value="All" control={<Radio />} label="All" />
-                                            <FormControlLabel value="Yes" control={<Radio />} label="Yes" />
-                                            <FormControlLabel value="No" control={<Radio />} label="No" />
-                                        </RadioGroup>
-                                    </FormControl>
-                                </Listitem>
-                            )
-                        })
-                    }
-                </MenuList>
-            </Paper>
+                        return (
+                            <Listitem key={name}>
+                                <FormControl>
+                                    <FormLabel id={name}>{name.replace(/_/g, ' ')}</FormLabel>
+                                    <RadioGroup
+                                        aria-labelledby={name}
+                                        name={name}
+                                        value={filters[name] || filter.choices[0].query_string}
+                                        onChange={(event) => handleChange(event, name)}
+                                    >
+                                        {
+                                            filter.choices.map((choice, index) => (
+                                                <FormControlLabel key={index} value={choice.query_string} control={<Radio />} label={choice.display} />
+                                            ))
+                                        }
+                                    </RadioGroup>
+                                </FormControl>
+                            </Listitem>
+                        )
+                    })
+                }
+            </MenuList>
         </Menu>
     )
 };
@@ -185,27 +205,48 @@ const TableToolbar = (props) => {
 
     return (
         <>
-            <FilterMenu open={open} filters={props.filters} filtersValues={props.filtersValues} handleChange={props.handleChange} anchorEl={anchorElement} handleClose={handleClose} />
-            <TableToolbarWrap sx={{ background: props.selectionModel.length <= 0 ? theme.palette.background.paper : theme.palette.primary.light }}>
-                <TableTitle variant="h5" color="text.primary"
-                    sx={{
-                        flexGrow: '1',
-                        color: props.selectionModel.length <= 0 ? theme.palette.text.primary : theme.palette.primary.dark,
-                    }}>
-                    {props.selectionModel.length > 0 ? props.selectionModel.length + ' users selected' : 'Users List'}
-                </TableTitle>
-                {props.selectionModel.length <= 0
-                    ? (<>
-                        <SearchField id="changelist-search" label="Search" variant="outlined"
-                            InputProps={{
-                                endAdornment: <FeatherIcon icon="search" size={24} />,
-                            }} />
-                        <ToolbarFilterButton variant="outlined" onClick={handleToggleMenu}>
-                            <FeatherIcon icon="filter" size={24} />
-                        </ToolbarFilterButton>
-                    </>)
+            <TableToolbarWrap sx={{ background: props.selectionModel.length > 0 || props.selectAcross ? theme.palette.primary.light : theme.palette.background.paper }}>
+                {props.selectionModel.length > 0 || props.selectAcross
+                    ? (<TableTitleWrap>
+                        <Typography variant="h5" color="text.primary"
+                            sx={{
+                                color: theme.palette.primary.dark,
+                                marginRight: theme.spacing(3),
+                                display: props.selection_counter ? 'block' : 'none'
+                            }}>
+                            {
+                                props.selectAcross
+                                    ? (`all authors selected`)
+                                    : (`${props.selectionModel.length} ${props.modelName.toLowerCase()} selected.`)
+                            }
 
-                    : (<>
+                        </Typography>
+
+                        <Link
+                            onClick={props.handleToggleSelectAcross}
+                            aria-label={`select all ${props.modelName.toLowerCase()}`}
+                            href="#"
+                        >
+                            {
+                                props.selectAcross
+                                    ? (`unselect all`)
+                                    : (`select all ${props.counter} ${props.modelName.toLowerCase()}`)
+                            }
+
+                        </Link>
+                    </TableTitleWrap>)
+
+                    : (<TableTitleWrap>
+                        <Typography variant="h5" color="text.primary"
+                            sx={{ color: theme.palette.text.primary }}
+                        >
+                            {props.modelName} List
+                        </Typography>
+                    </TableTitleWrap>)
+                }
+                {props.selectionModel.length > 0 || props.selectAcross
+                    /* perform actions */
+                    ? (<ToolbarActionWrap>
                         <ToolbarActionMenu
                             select
                             label="Select Action"
@@ -217,20 +258,43 @@ const TableToolbar = (props) => {
                             InputProps={{
                                 disableUnderline: true,
                             }}
+                            onChange={props.handleActionSelectChange}
                         >
                             {props.actions.map((action) => (
-                                <MenuItem key={action} value={action}>
-                                    {action}
+                                <MenuItem key={action[0]} value={action[0]}>
+                                    {action[1]}
                                 </MenuItem>
                             ))}
                         </ToolbarActionMenu>
 
-                        <ToolbarActionButton variant="contained">
+                        <ToolbarActionButton variant="contained" onClick={props.handlePerformAction}>
                             <FeatherIcon icon="check-circle" size={24} />
                         </ToolbarActionButton>
-                    </>)
+                    </ToolbarActionWrap>)
+
+                    /* search and filter */
+                    : (<ToolbarActionWrap>
+                        <SearchField
+                            id="changelist-search"
+                            label="Search"
+                            variant="outlined"
+                            sx={{ display: props.searchFields.length > 0 ? 'block' : 'none' }}
+                            InputProps={{
+                                endAdornment: <FeatherIcon icon="search" size={24} />,
+                                onInput: event => {
+                                    let value = Boolean(event.target.value) ? `?q=${event.target.value}` : '?';
+                                    props.handleSearchFilterChange(value, 'filter_by_search');
+                                },
+                            }}
+                        />
+                        <ToolbarFilterButton variant="outlined" onClick={handleToggleMenu} sx={{ display: props.filters_list.length > 0 ? 'flex' : 'none' }}>
+                            <FeatherIcon icon="filter" size={24} />
+                        </ToolbarFilterButton>
+                    </ToolbarActionWrap>)
                 }
             </TableToolbarWrap >
+
+            <FilterMenu open={open} filters_list={props.filters_list} filters={props.filters} handleChange={props.handleFiltersChange} anchorEl={anchorElement} handleClose={handleClose} />
         </>
 
     )

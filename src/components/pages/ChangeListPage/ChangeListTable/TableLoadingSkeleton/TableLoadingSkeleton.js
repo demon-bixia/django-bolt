@@ -18,11 +18,12 @@ const LoadingBox = styled(Box)(({ theme }) => ({
     }
 }));
 
+// fix animation and mobile view
 const TableLoadingSkeleton = () => {
     const theme = useTheme();
 
     return (
-        <Box sx={{ width: '100%', borderRadius: '12px', padding: theme.spacing(5), background: theme.palette.background.paper }}>
+        <Box sx={{ width: '100%', height: '100%', borderRadius: '12px', padding: theme.spacing(5), background: theme.palette.background.paper, display: 'flex', flexDirection: 'column' }}>
             {/* table toolbar */}
             <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', marginBottom: theme.spacing(6) }}>
                 <Box sx={{ flexGrow: '1' }}>
@@ -32,8 +33,9 @@ const TableLoadingSkeleton = () => {
                 <LoadingBox sx={{ width: { xs: '100%', md: '233px' }, height: '49px', marginRight: '8px' }} />
                 <LoadingBox sx={{ width: '49px', height: '49px' }} />
             </Box>
+
             {/* table main */}
-            <Box sc={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', marginBottom: theme.spacing(5) }}>
+            <Box sx={{ flexGrow: '1', display: 'flex', flexDirection: 'column', justifyContent: 'start', marginBottom: theme.spacing(5) }}>
 
                 {[1, 2, 3, 4, 5, 7, 8, 9].map((item, index) => (
                     <Box sx={{ marginBottom: theme.spacing(7) }} key={index}>
@@ -48,6 +50,7 @@ const TableLoadingSkeleton = () => {
                     </Box>
                 ))}
             </Box>
+
             {/* table footer */}
             <Box sx={{ display: 'flex', }}>
                 <Box sx={{ flexGrow: 1 }} />

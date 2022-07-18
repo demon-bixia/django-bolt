@@ -6,9 +6,19 @@ import indexPageReducer, {
     selectStatus,
     selectAllActions,
     selectAllApps,
-    indexPageSlice
+    selectModelByName,
+    indexPageSlice,
 } from "./indexPageSlice";
 
-export {fetchActionList, fetchAppList, selectStatus, selectAllActions, selectAllApps, indexPageReducer, indexPageSlice};
+export {
+    fetchActionList,
+    fetchAppList,
+    selectStatus,
+    selectAllActions,
+    selectAllApps,
+    indexPageReducer,
+    indexPageSlice,
+    selectModelByName,
+};
 
 export default IndexPage;

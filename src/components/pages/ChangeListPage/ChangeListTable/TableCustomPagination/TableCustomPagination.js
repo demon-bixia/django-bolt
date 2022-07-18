@@ -2,12 +2,7 @@ import Box from "@mui/material/Box";
 import IconButton from "@mui/material/IconButton";
 import TablePagination from "@mui/material/TablePagination";
 import { styled, useTheme } from "@mui/system";
-import {
-    gridPageSelector, useGridApiContext,
-    useGridSelector
-} from '@mui/x-data-grid';
 import FeatherIcon from "feather-icons-react";
-
 
 const PaginationWrap = styled(Box)(({ theme }) => ({
     '.MuiToolbar-root': {
@@ -28,33 +23,45 @@ const PaginationActions = (props) => {
 
     return (
         <ChangeListActionWrap>
-            <IconButton sx={{ marginLeft: theme.spacing(3) }} onClick={(event) => props.onPageChange(event, 0)}>
+            <IconButton
+                sx={{ marginLeft: theme.spacing(3) }}
+                onClick={(event) => props.onPageChange(event, 0)}
+                disabled={props.count <= props.rowsPerPage || props.page === 0}
+            >
                 <FeatherIcon icon="chevron-left" />
             </IconButton>
 
-            <IconButton onClick={(event) => props.onPageChange(event, 1)}>
+            <IconButton
+                onClick={(event) => props.onPageChange(event, 1)}
+                disabled={props.count <= props.rowsPerPage || (props.page + 1) * props.rowsPerPage >= props.count}
+            >
                 <FeatherIcon icon="chevron-right" />
             </IconButton>
         </ChangeListActionWrap>
     );
 };
 
-const TableCustomPagination = (props) => {
-    const apiRef = useGridApiContext();
-    const page = useGridSelector(apiRef, gridPageSelector);
+const withFilters = (WrappedComponent, filters) => {
 
+    return (props) => (
+        <WrappedComponent filters={filters} {...props} />
+    );
+}
+
+
+const TableCustomPagination = ({ page, counter, pageSize, rowsPerPageOptions, handlePageChange, handlePageSizeChange, filters }) => {
 
     return (
         <PaginationWrap>
             <TablePagination
                 component="div"
                 page={page}
-                count={props.counter}
-                rowsPerPage={props.pageSize}
-                rowsPerPageOptions={props.rowsPerPageOptions}
-                onPageChange={(event, value) => apiRef.current.setPage(value)}
-                onRowsPerPageChange={props.onPageSizeChange}
-                ActionsComponent={PaginationActions}
+                count={counter}
+                rowsPerPage={pageSize}
+                rowsPerPageOptions={rowsPerPageOptions}
+                onPageChange={handlePageChange}
+                onRowsPerPageChange={handlePageSizeChange}
+                ActionsComponent={withFilters(PaginationActions, filters)}
             />
         </PaginationWrap>
     );

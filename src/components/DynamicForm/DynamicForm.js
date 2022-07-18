@@ -4,7 +4,7 @@ import { styled } from "@mui/system";
 import moment from "moment";
 import client from "../../application/client";
 import { useSelector } from "react-redux";
-import { selectCsrfToken } from "../AuthProvider/authProvidertSlice";
+import { selectCsrfToken } from "../AuthProvider/authProviderSlice";
 
 const FormInput = styled(DynamicField)(({ theme }) => ({
     marginBottom: theme.spacing(5),

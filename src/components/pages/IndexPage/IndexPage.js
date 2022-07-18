@@ -3,7 +3,7 @@ import { styled } from "@mui/system";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Outlet } from "react-router-dom";
-import { selectUser } from "../../AuthProvider/authProvidertSlice";
+import { selectUser } from "../../AuthProvider";
 import { fetchActionList, fetchAppList, selectAllActions, selectAllApps, selectStatus } from "./indexPageSlice";
 import Sidebar from "./Sidebar";
 import Topbar from "./Topbar";
@@ -42,7 +42,7 @@ const IndexPage = (props) => {
                 <Sidebar appList={appList} />
                 <Topbar appList={appList} />
                 <VerticalWrap>
-                    <Outlet context={{ appList: appList, actionList: actionList, user: user }} />
+                    <Outlet />
                 </VerticalWrap>
             </Layout>
             : null

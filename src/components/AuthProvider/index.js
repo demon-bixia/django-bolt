@@ -1,7 +1,14 @@
 import AuthProvider from "./AuthProvider";
 import authProviderReducer, {
-    fetchUser, fetchCsrfToken, setUser, selectUser, removeUser, selectCsrfToken, selectStatus, authProvidertSlice
-} from './authProvidertSlice'
+    fetchUser,
+    fetchCsrfToken,
+    setUser,
+    selectUser,
+    removeUser,
+    selectCsrfToken,
+    selectStatus,
+    authProviderSlice
+} from './authProviderSlice'
 
 export {
     authProviderReducer,
@@ -12,6 +19,7 @@ export {
     removeUser,
     selectCsrfToken,
     selectStatus,
-    authProvidertSlice
+    authProviderSlice,
+
 };
 export default AuthProvider

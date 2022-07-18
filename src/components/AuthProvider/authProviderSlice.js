@@ -15,12 +15,13 @@ export const fetchUser = createAsyncThunk('auth/fetchUser', async () => {
 
 
 // Slice
-export const authProvidertSlice = createSlice({
+export const authProviderSlice = createSlice({
     name: 'auth',
 
     initialState: {
         user: JSON.parse(Cookies.get('bolt-user') || null),
-        csrfToken: Cookies.get('csrfToken') || null, status: "idle",
+        csrfToken: Cookies.get('csrftoken') || null,
+        status: "idle",
     },
 
     reducers: {
@@ -33,37 +34,37 @@ export const authProvidertSlice = createSlice({
             state.user = null;
             Cookies.set('bolt-user', JSON.stringify(null));
         },
+
+
     },
 
     extraReducers(builder) {
         builder
             .addCase(fetchCsrfToken.fulfilled, (state, action) => {
                 state.csrfToken = action.payload;
-                Cookies.set('csrfToken', action.payload);
+                Cookies.set('csrftoken', action.payload);
             })
             .addCase(fetchUser.fulfilled, (state, action) => {
                 state.user = action.payload;
                 Cookies.set('bolt-user', JSON.stringify(action.payload));
-            })
-            .addMatcher(isAnyOf(fetchCsrfToken.pending, fetchUser.pending), state => {
-                state.status = 'loading';
-            })
-            .addMatcher(isFulfilled(fetchCsrfToken, fetchUser), state => {
                 state.status = 'success';
             })
-            .addMatcher(isAnyOf(fetchCsrfToken.rejected, fetchUser.rejected), state => {
+            .addCase(fetchUser.pending, state => {
+                state.status = 'loading';
+            })
+            .addCase(fetchUser.rejected, state => {
                 state.status = 'failure';
             })
     }
 });
 
-
+// Selectors
 export const selectUser = state => state.auth.user;
 
 export const selectCsrfToken = state => state.auth.csrfToken;
 
 export const selectStatus = state => state.auth.status;
 
-export const { setUser, removeUser } = authProvidertSlice.actions;
+export const { setUser, removeUser, } = authProviderSlice.actions;
 
-export default authProvidertSlice.reducer;
+export default authProviderSlice.reducer;

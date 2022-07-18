@@ -1,16 +1,26 @@
 import Box from "@mui/material/Box";
-import LinearProgress from '@mui/material/LinearProgress';
-import { styled, useTheme } from "@mui/system";
+import { styled } from "@mui/system";
+import { DataGrid } from '@mui/x-data-grid';
+import debounce from 'lodash.debounce';
+import { useCallback, useEffect, useState } from 'react';
+import { useDispatch, useSelector } from "react-redux";
+import MessageSnackBar from "../../../alerts/MessageSnackBar";
+import { selectCsrfToken } from "../../../AuthProvider";
 import {
-    DataGrid
-} from '@mui/x-data-grid';
-import FeatherIcon from "feather-icons-react";
-import { useEffect, useState } from 'react';
+    closeAlert,
+    fetchChangelistData,
+    performAction,
+    selectChangeListData, setFilters, setPage,
+    setPageSize,
+    setSelectAcross,
+    setSelectionModel,
+    setSorting
+} from "./changeListSlice";
+import LoadingOverlay from "./LoadingOverlay";
 import TablePagination from "./TableCustomPagination";
 import TableEmptyOverlay from "./TableEmptyOverlay";
 import TableLoadingSkeleton from "./TableLoadingSkeleton";
 import TableToolbar from "./TableToolbar";
-
 
 const Table = styled(DataGrid)(({ theme }) => ({
     boxShadow: theme.shadows[0],
@@ -30,7 +40,7 @@ const Table = styled(DataGrid)(({ theme }) => ({
     },
 
     '.MuiDataGrid-iconSeparator': {
-        display: 'none',
+        display: 'none'
     },
 
     '.MuiDataGrid-columnHeaders': {
@@ -62,183 +72,197 @@ const Table = styled(DataGrid)(({ theme }) => ({
     }
 }));
 
-const BooleanDisplayWrapper = styled(Box)(({ theme, value }) => ({
-    backgroundColor: value ? theme.palette.success.tint : theme.palette.error.tint,
-    borderRadius: '100%',
-    display: 'flex',
-    justifyContent: 'center',
-    padding: '1px',
-    width: '16px',
-    height: '16px',
-    alignItems: 'center',
-    '.feather': {
-        color: theme.palette.grey[100],
-        stokeWidth: '1.5px',
-    }
-}))
-
-const BooleanDisplayIcon = ({ value }) => {
-    const theme = useTheme();
-
-    return (
-        <BooleanDisplayWrapper value={value}>
-            <FeatherIcon icon={value ? 'check' : 'x'} size={16} />
-        </BooleanDisplayWrapper >
-    )
-};
-
-const booleanRenderer = (params) => <BooleanDisplayIcon value={params.value} />;
-
-let columns = [
-    { 'field': 'username', 'type': 'string', 'headerName': 'username', 'width': 200, },
-    { 'field': 'email_address', 'type': 'string', 'headerName': 'email address', 'width': 200 },
-    { 'field': 'first_name', 'type': 'string', 'headerName': 'first name', 'width': 200 },
-    { 'field': 'last_name', 'type': 'string', 'headerName': 'last name', 'width': 200 },
-    { 'field': 'staff_status', 'type': 'boolean', 'headerName': 'staff status', 'width': 200, renderCell: booleanRenderer }
-]
-
-const rows = [
-    {
-        'id': '1',
-        'username': 'Zhuo-Fan',
-        'email_address': 'admin@email.com',
-        'first_name': 'Fan',
-        'last_name': 'Zhuo',
-        'staff_status': true,
-    },
-    {
-        'id': '2',
-        'username': 'Zhuo-Yi-Fan',
-        'email_address': 'worker@email.com',
-        'first_name': 'Yi-Fan',
-        'last_name': 'Zhuo',
-        'staff_status': false,
-    },
-    {
-        'id': '3',
-        'username': 'Li-Wu-Yi',
-        'email_address': 'worker@email.com',
-        'first_name': 'Wu-Yi',
-        'last_name': 'Li',
-        'staff_status': false,
-    },
-    {
-        'id': '4',
-        'username': 'Yang-Kai',
-        'email_address': 'admin@email.com',
-        'first_name': 'Kai\'er',
-        'last_name': 'Yang',
-        'staff_status': true,
-    },
-    {
-        'id': '5',
-        'username': 'Zhuo-Yi-Fan',
-        'email_address': 'worker@email.com',
-        'first_name': 'Yi-Fan',
-        'last_name': 'Zhuo',
-        'staff_status': false,
-    },
-    {
-        'id': '6',
-        'username': 'Su-Yan',
-        'email_address': 'admin@email.com',
-        'first_name': 'Yan',
-        'last_name': 'Su',
-        'staff_status': true,
-    },
-    {
-        'id': '7',
-        'username': 'Su-Yan',
-        'email_address': 'admin@email.com',
-        'first_name': 'Yan',
-        'last_name': 'Su',
-        'staff_status': true,
-    },
-    {
-        'id': '8',
-        'username': 'Su-Yan',
-        'email_address': 'admin@email.com',
-        'first_name': 'Yan',
-        'last_name': 'Su',
-        'staff_status': true,
-    },
-    {
-        'id': '9',
-        'username': 'Su-Yan',
-        'email_address': 'admin@email.com',
-        'first_name': 'Yan',
-        'last_name': 'Su',
-        'staff_status': true,
-    },
-    {
-        'id': '10',
-        'username': 'Su-Yan',
-        'email_address': 'admin@email.com',
-        'first_name': 'Yan',
-        'last_name': 'Su',
-        'staff_status': true,
-    },
-];
-
-const ChangeListTable = () => {
-    const [pageSize, setPageSize] = useState(6);
-    const [selectionModel, setSelectionModel] = useState([]);
+const ChangeListTable = ({ model }) => {
+    // forms state
     const [selectedAction, setSelectedAction] = useState('');
-    const [actions, setActions] = useState(['', 'Delete selected']);
-    const [status, setStatus] = useState('finished');
-    const [filters, setFilters] = useState(['staff_status', 'super_user_status']);
-    const [filtersValues, setFiltersValues] = useState({});
 
-    const theme = useTheme();
+    // delay for the skeleton animation
+    const [skeletonAnimationDelay, setSkeletonAnimationDelay] = useState(true);
 
-    const onPageSizeChange = event => setPageSize(event.target.value);
 
-    const handleFiltersValuesChange = (event, name) => { setFilters({ ...filters, [name]: event.target.value }) };
+    // csrfToken used for post requests
+    const csrfToken = useSelector(selectCsrfToken);
 
-    const onSelectionModelChange = newSelectionModel => setSelectionModel(newSelectionModel)
+    // changelist data
+    const {
+        status,
+        rowsStatus,
+
+        columns,
+        rows,
+        config,
+
+        page,
+        pageSize,
+
+        selectionModel,
+        selectAcross,
+
+        filters,
+        sorting,
+
+        alertInfo,
+    } = useSelector(selectChangeListData);
+
+    const dispatch = useDispatch();
+
+    // events
+    const handlePageChange = (event, value) => dispatch(setPage(value))
+
+    const handlePageSizeChange = event => dispatch(setPageSize(event.target.value));
+
+    const handleSelectionModelChange = (newSelectionModel) => dispatch(setSelectionModel(newSelectionModel));
+
+    const handleActionSelectChange = event => setSelectedAction(event.target.value);
+
+    const handleToggleSelectAcross = event => {
+        event.preventDefault();
+        if (selectAcross) {
+            dispatch(setSelectionModel([]));
+        }
+        dispatch(setSelectAcross(!selectAcross));
+    };
+
+    const handlePerformAction = () => (async () => {
+        dispatch(performAction({
+            url: model.perform_action_url,
+            action: selectedAction,
+            selectedIds: selectionModel,
+            selectAcross: selectAcross,
+            csrfToken: csrfToken,
+        }));
+    })();
+
+    const handleFiltersChange = useCallback((event, name) => {
+        dispatch(setFilters({ ...filters, [name]: event.target.value }))
+    }, [filters]);
+
+    const handleSearchFilterChange = useCallback(
+        debounce((value, name) => {
+            dispatch(setFilters({ ...filters, [name]: value }))
+        }, 800)
+        , [filters['filter_by_search']]);
+
+    const handleSortingChange = useCallback(newSortModel => {
+        let newSorting = newSortModel.map(item => ({
+            ...item,
+            'fieldIndex': columns.findIndex((column) => {
+                return (column.field === item.field)
+            })
+        }));
+
+        dispatch(setSorting(newSorting));
+    }, [columns, sorting]);
+
+    const handleCloseAlert = () => dispatch(closeAlert());
 
     useEffect(() => {
-        setTimeout(() => {
-            setStatus('finished');
-        }, 2000)
-    })
+        // if the table is empty fetch the table data.
+        if (status === 'idle') {
+            dispatch(fetchChangelistData({
+                url: model.changelist_url,
+                page: page + 1,
+                all: pageSize === config.list_max_show_all
+            }));
+        }
+
+        // when the data is fetched:
+        if (status === 'success') {
+            // update rows if rows are not updated
+            if (rowsStatus === 'notUpdated') {
+                dispatch(fetchChangelistData({
+                    url: model.changelist_url,
+                    page: page + 1,
+                    all: pageSize === config.list_max_show_all,
+                    rowsOnly: true,
+                    filters: filters,
+                    sorting: sorting,
+                }));
+            }
+
+            // when selectAcross is selected select all rows
+            if (selectAcross) {
+                let rowsIds = rows.map(row => row.id);
+                dispatch(setSelectionModel(rowsIds));
+            }
+        }
+    }, [rowsStatus, selectAcross]);
+
+    setTimeout(() => {
+        setSkeletonAnimationDelay(false);
+    }, 1000);
 
     return (
-        <Box sx={{ width: '100%', height: '70vh' }}>
+        <Box sx={{ width: '100%', height: '80vh' }}>
             <Box sx={{ height: '100%', }}>
                 {
-                    status === 'loading'
+                    status === 'loading' || status === 'idle' || skeletonAnimationDelay
                         ? (
                             <TableLoadingSkeleton />
                         )
-
                         : (
-                            <Table
-                                autoHeight={rows.length > 0 ? true : false}
-                                rows={rows}
-                                columns={columns}
-                                pageSize={pageSize}
-                                rowsPerPageOptions={[6, 10, 20]}
-                                checkboxSelection
-                                disableSelectionOnClick
-                                selectionModel={selectionModel}
-                                onSelectionModelChange={onSelectionModelChange}
-                                components={{
-                                    Toolbar: TableToolbar,
-                                    Pagination: TablePagination,
-                                    NoRowsOverlay: TableEmptyOverlay,
-                                    LoadingOverlay: LinearProgress,
-                                }}
-                                componentsProps={{
-                                    pagination: { counter: rows.length, pageSize, rowsPerPageOptions: [6, 10, 20], onPageSizeChange },
-                                    toolbar: { selectionModel, actions, selectedAction, filters, filtersValues, handleFiltersValuesChange }
-                                }}
-                            />
+                            <>
+                                <Table
+                                    loading={rowsStatus === 'notUpdated'}
+                                    rows={rows}
+                                    columns={columns}
+                                    keepNonExistentRowsSelected={!selectAcross}
+                                    checkboxSelectionVisibleOnly={selectAcross}
+                                    disableSelectionOnClick
+                                    checkboxSelection={true}
+                                    isRowSelectable={() => !selectAcross}
+                                    selectionModel={selectionModel}
+                                    onSelectionModelChange={handleSelectionModelChange}
+                                    disableColumnFilter={true}
+                                    hideFooterSelectedRowCount={true}
+                                    sortingMode="server"
+                                    sortingModel={sorting}
+                                    onSortModelChange={handleSortingChange}
+                                    components={{
+                                        Toolbar: TableToolbar,
+                                        Pagination: TablePagination,
+                                        NoRowsOverlay: TableEmptyOverlay,
+                                        LoadingOverlay: LoadingOverlay,
+                                    }}
+                                    componentsProps={{
+                                        pagination: {
+                                            counter: config.result_count,
+                                            pageSize: pageSize,
+                                            rowsPerPageOptions: [config.list_per_page, config.list_max_show_all],
+                                            page,
+                                            filters,
+                                            handlePageChange,
+                                            handlePageSizeChange,
+                                        },
+                                        toolbar: {
+                                            modelName: model.name,
+                                            counter: config.result_count,
+                                            filters_list: config.filters,
+                                            selection_counter: config.actions_selection_counter,
+                                            searchFields: config.search_fields,
+                                            actions: config.action_choices,
+                                            selectedAction,
+                                            selectionModel,
+                                            selectAcross,
+                                            filters,
+                                            handleToggleSelectAcross,
+                                            handleActionSelectChange,
+                                            handleFiltersChange,
+                                            handleSearchFilterChange,
+                                            handlePerformAction,
+                                        }
+                                    }}
+                                />
+                                <MessageSnackBar
+                                    {...alertInfo}
+                                    handleClose={handleCloseAlert}
+                                />
+                            </>
                         )
                 }
             </Box>
         </Box>
-    )
+    );
 };
 
 

@@ -8,6 +8,7 @@ import ListSubheader from "@mui/material/ListSubheader";
 import { styled, useTheme } from "@mui/system";
 import FeatherIcon from "feather-icons-react";
 import { useEffect, useState } from "react";
+import { Link as RouterLink } from "react-router-dom";
 
 const SidebarActionList = styled(List)(({ theme }) => ({
     ".MuiListSubheader-root": {
@@ -90,17 +91,24 @@ const Toolbar = ({ appList, open, type }) => {
                 aria-label="actions list subheader"
                 disableSticky={true}
                 sx={{ display: conditionalStyle((open ? 'auto' : 'none'), "auto") }} >Actions</ListSubheader>}>
-            {[{ "text": "HomePage", "icon": "home" }, {
-                "text": "View site", "icon": "external-link"
-            }, { "text": "Documentation", "icon": "book" }, {
-                "text": "activity", "icon": "activity"
-            }].map((item, index) => (<ListItem sx={{ display: 'block' }} key={index}>
-                <ListItemButton sx={{ justifyContent: conditionalStyle((open ? 'start' : 'center'), "start") }} aria-label={item.text}>
+            {[
+                { "text": "HomePage", "icon": "home", "url": '/' },
+                { "text": "View site", "icon": "external-link", "url": '/' },
+                { "text": "Documentation", "icon": "book", "url": '/' },
+                { "text": "activity", "icon": "activity", "url": '/' }
+            ].map((item, index) => (<ListItem sx={{ display: 'block' }} key={index}>
+                <ListItemButton
+                    to={item.url}
+                    component={RouterLink}
+                    sx={{ justifyContent: conditionalStyle((open ? 'start' : 'center'), "start") }}
+                    aria-label={item.text}
+                >
                     <ListItemIcon sx={{
                         mr: conditionalStyle((open ? theme.spacing(3) : 'auto'), theme.spacing(3)),
                         justifyContent: conditionalStyle((open ? 'start' : 'center'), "start")
-                    }}><FeatherIcon
-                            icon={item.icon} /></ListItemIcon>
+                    }}>
+                        <FeatherIcon icon={item.icon} />
+                    </ListItemIcon>
                     <ListItemText primary={item.text}
                         sx={{ display: conditionalStyle((open ? "initial" : "none"), "initial") }} />
                 </ListItemButton>

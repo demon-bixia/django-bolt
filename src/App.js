@@ -18,7 +18,6 @@ import ChangeListPage from './components/pages/ChangeListPage';
 // Core features:
 // round 1
 // todo create the change list page.
-// todo remove duplicate requests.
 // todo create the admin activity/history page.
 
 // round 2
@@ -49,7 +48,7 @@ const App = () => {
                     <Route element={<ProtectedRoutes />}>
                         <Route path="/" element={<IndexPage />}>
                             <Route path='/' element={<HomePage />} />
-                            <Route path='/changelist/' element={<ChangeListPage />} />
+                            <Route path='/:appLabel/:modelName/changelist/' element={<ChangeListPage />} />
                             <Route path="/test" element={<TestForm />} />
                         </Route>
                     </Route>

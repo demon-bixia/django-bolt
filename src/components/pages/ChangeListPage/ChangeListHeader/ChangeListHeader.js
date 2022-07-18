@@ -1,9 +1,12 @@
-import Breadcrumbs from '@mui/material/Breadcrumbs';
-import Link from '@mui/material/Link';
 import Box from '@mui/material/Box';
-import Typography from '@mui/material/Typography';
+import Breadcrumbs from '@mui/material/Breadcrumbs';
 import Button from "@mui/material/Button";
-import { styled, typography, useTheme } from '@mui/system';
+import Link from '@mui/material/Link';
+import Typography from '@mui/material/Typography';
+import { styled, useTheme } from '@mui/system';
+import { useSelector } from 'react-redux';
+import { Link as RouterLink, useLocation } from "react-router-dom";
+import { selectStatus } from '../../IndexPage';
 
 
 const ChangeListHeaderWrap = styled(Box)(({ theme }) => ({
@@ -30,32 +33,47 @@ const BreadcrumbSeparator = styled(Box)(({ theme }) => ({
     background: theme.palette.grey[300],
 }));
 
-const ChangeListHeader = () => {
+const ChangeListHeader = ({ model }) => {
     const theme = useTheme();
+    const location = useLocation();
+    const pathnames = location.pathname.split('/').filter((x) => x);
+    const status = useSelector(selectStatus);
 
     return (
         <ChangeListHeaderWrap>
-            {/* breadcrumb navigation */}
-            <Breadcrumbs aria-label="breadcrumb" separator={<BreadcrumbSeparator />}>
-                <Link
-                    underline="none"
-                    href="#"
-                    color={theme.palette.text.primary}
-                >
-                    Home
-                </Link>
 
-                <Typography color={theme.palette.text.secondary} >
-                    Users List
-                </Typography>
-            </Breadcrumbs>
+            {status === 'success'
+                ? (
+                    <>
+                        {/* breadcrumb navigation */}
+                        <Breadcrumbs aria-label="breadcrumb" separator={<BreadcrumbSeparator />}>
+                            <Link
+                                component={RouterLink}
+                                underline="none"
+                                to="/"
+                                color={theme.palette.text.primary}
+                            >
+                                Home
+                            </Link>
 
-            {/* changelist primary button */}
-            <PrimaryGradientButton variant="contained" >
-                Add User
-            </PrimaryGradientButton>
-        </ChangeListHeaderWrap>
+                            <Typography
+                                color={theme.palette.text.secondary}
+                            >
+                                {pathnames[1]}
+                            </Typography>
+                        </Breadcrumbs>
+
+                        {/* changelist primary button */}
+                        <PrimaryGradientButton variant="contained" >
+                            Add {model.object_name}
+                        </PrimaryGradientButton>
+                    </>
+                )
+                : null
+            }
+        </ChangeListHeaderWrap >
     );
+
 };
 
 export default ChangeListHeader;

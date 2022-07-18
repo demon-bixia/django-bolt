@@ -59,7 +59,7 @@ const ConnectingLine = styled(Box)(({ theme }) => ({
 }));
 
 
-// todo fix connecting line
+// fix connecting line
 const ActivityLog = ({ actionList }) => {
     const theme = useTheme();
 

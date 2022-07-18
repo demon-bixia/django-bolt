@@ -1,6 +1,6 @@
 import { Navigate, Outlet, useLocation } from "react-router-dom";
 import { useSelector } from "react-redux";
-import { selectUser } from "../../AuthProvider/authProvidertSlice";
+import { selectUser } from "../../AuthProvider";
 
 const ProtectedRoutes = () => {
     const location = useLocation();

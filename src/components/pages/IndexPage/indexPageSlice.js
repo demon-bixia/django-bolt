@@ -4,9 +4,7 @@ import client from "../../../application/client";
 // Adapters
 const actionListAdapter = createEntityAdapter({
     sortComparer: (a, b) => a['action_time'].localeCompare(b['action_time']),
-
 });
-
 
 // Thunks
 export const fetchAppList = createAsyncThunk('index/fetchAppList', async () => {
@@ -18,7 +16,6 @@ export const fetchActionList = createAsyncThunk('index/fetchActionList', async (
     const response = await client.get('/admin_log/');
     if (response['status'] === 200) return response.data['action_list'];
 });
-
 
 // Slice
 export const indexPageSlice = createSlice({
@@ -54,5 +51,13 @@ export const indexPageSlice = createSlice({
 export const selectAllApps = state => state.index.appList;
 export const { selectAll: selectAllActions } = actionListAdapter.getSelectors(state => state.index.actionList);
 export const selectStatus = state => state.index.status;
+export const selectModelByName = (state, appLabel, modelName) => {
+    try {
+        let app = state.index.appList.find(app => app.app_label === appLabel);
+        return app.models.find(model => model.name === modelName);
+    } catch (error) {
+        return {};
+    }
+};
 
 export default indexPageSlice.reducer;

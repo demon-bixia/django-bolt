@@ -9,8 +9,9 @@ import FeatherIcon from "feather-icons-react";
 import { useDispatch } from "react-redux";
 import { useLocation, useNavigate } from "react-router";
 import AdminLogo from "../../../../assets/logo/AdminLogoLightFilled";
-import { setUser } from "../../../AuthProvider/authProvidertSlice";
+import { setUser, fetchCsrfToken } from "../../../AuthProvider/";
 import Box from '@mui/material/Box';
+
 
 const PaperBackground = styled(Paper)(({ theme }) => ({
     position: "relative",
@@ -106,8 +107,10 @@ function LoginForm({ context: { responseError, nonFieldErrors }, formFields, onS
             removeNonFieldErrors();
             onSubmit(event).then(response => {
                 if (response.status === 200) {
-                    // if successfully authenticated set the user
+                    // if successfully authenticated save the user
                     dispatch(setUser(response.data['user']));
+                    // refresh csrfToken
+                    dispatch(fetchCsrfToken());
 
                     // then redirect to the route the client came from
                     if (location.state?.from) {
