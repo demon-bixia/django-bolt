@@ -27,6 +27,7 @@ export const indexPageSlice = createSlice({
         status: 'idle',
     },
 
+
     extraReducers(builder) {
         builder
             .addCase(fetchAppList.fulfilled, (state, action) => {

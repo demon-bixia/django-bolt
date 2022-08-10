@@ -1,7 +1,7 @@
 import Box from "@mui/material/Box";
 import { styled } from "@mui/system";
 import { useSelector } from "react-redux";
-import { selectUser } from "../../AuthProvider";
+import { selectUser } from "../../authentication/AuthProvider";
 import { selectAllActions, selectAllApps } from "../IndexPage";
 import ActivityLog from "./ActivityLog";
 import Applications from "./Applications";

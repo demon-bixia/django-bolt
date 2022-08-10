@@ -1,6 +1,6 @@
 import IndexPage from "./IndexPage";
 
-import indexPageReducer, {
+import {
     fetchActionList,
     fetchAppList,
     selectStatus,
@@ -16,7 +16,6 @@ export {
     selectStatus,
     selectAllActions,
     selectAllApps,
-    indexPageReducer,
     indexPageSlice,
     selectModelByName,
 };

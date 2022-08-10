@@ -1,17 +1,12 @@
-import Alert from "@mui/material/Alert";
-import AlertTitle from '@mui/material/AlertTitle';
-import Button from '@mui/material/Button';
-import Collapse from '@mui/material/Collapse';
-import Paper from "@mui/material/Paper";
-import Typography from "@mui/material/Typography";
+import { Alert, AlertTitle, Box, Button, Collapse, Paper, Typography } from "@mui/material";
 import { styled } from '@mui/system';
 import FeatherIcon from "feather-icons-react";
+import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { useLocation, useNavigate } from "react-router";
 import AdminLogo from "../../../../assets/logo/AdminLogoLightFilled";
-import { setUser, fetchCsrfToken } from "../../../AuthProvider/";
-import Box from '@mui/material/Box';
-
+import { fetchCsrfToken, setUser } from "../../../authentication/AuthProvider";
+import DynamicField from "../../../forms/fields/DynamicField";
 
 const PaperBackground = styled(Paper)(({ theme }) => ({
     position: "relative",
@@ -41,7 +36,6 @@ const PaperBackground = styled(Paper)(({ theme }) => ({
     },
 }));
 
-
 const Title = styled(Typography)(({ theme }) => ({
     marginBottom: theme.spacing(4),
 }));
@@ -69,7 +63,6 @@ const SubmitButton = styled(Button)(({ theme }) => ({
     padding: theme.spacing(4),
     background: theme.palette.primaryGradient.main,
     borderRadius: "8px",
-    textTransform: "capitalize",
     boxShadow: theme.shadows[0],
     "&:hover": {
         boxShadow: theme.shadows[0],
@@ -80,10 +73,15 @@ const Logo = styled(Box)(({ theme }) => ({
     marginBottom: theme.spacing(7),
 }));
 
-function LoginForm({ context: { responseError, nonFieldErrors }, formFields, onSubmit, removeNonFieldErrors, ...props }) {
+const InputComponent = styled(DynamicField)(({ theme }) => ({
+    marginBottom: theme.spacing(4),
+}));
+
+const LoginForm = ({ status, serializerFields, handleFormSubmit, handleRemoveNonFieldErrors, nonFieldErrors, ...props }) => {
     const navigate = useNavigate();
     const location = useLocation();
     const dispatch = useDispatch();
+    const [responseStatus, setResponseStatus] = useState('');
 
     return (<PaperBackground elevation={0}>
         <Logo>
@@ -91,21 +89,25 @@ function LoginForm({ context: { responseError, nonFieldErrors }, formFields, onS
         </Logo>
         <Title variant="h3">Hi Welcome back</Title>
         <HelperText variant="body2">Enter your credentials to continue</HelperText>
+
         <Collapse in={nonFieldErrors.length > 0} sx={{ width: '100%' }}>
             <Alert
                 severity="error"
                 icon={<FeatherIcon icon="alert-circle" size={20} />}
-                onClose={event => removeNonFieldErrors()}
+                onClose={event => handleRemoveNonFieldErrors()}
             >
                 <FeedBackTitle><Typography
-                    variant="h6">{responseError ? responseError.response.status : ''}</Typography></FeedBackTitle>
+                    variant="h6">{responseStatus ? responseStatus : ''}</Typography></FeedBackTitle>
                 <Typography
                     variant="body1">{nonFieldErrors ? nonFieldErrors.join('\n') : ''}</Typography>
             </Alert>
         </Collapse>
+
         <Form onSubmit={event => {
-            removeNonFieldErrors();
-            onSubmit(event).then(response => {
+            handleRemoveNonFieldErrors();
+
+            handleFormSubmit(event).then(response => {
+                setResponseStatus(response.status);
                 if (response.status === 200) {
                     // if successfully authenticated save the user
                     dispatch(setUser(response.data['user']));
@@ -121,7 +123,15 @@ function LoginForm({ context: { responseError, nonFieldErrors }, formFields, onS
                 }
             });
         }}>
-            {formFields}
+            {
+                serializerFields.map((serializerField) => (
+                    <InputComponent
+                        key={serializerField.name}
+                        serializerField={serializerField}
+                        {...props}
+                    />
+                ))
+            }
             <SubmitButton
                 type="submit"
                 fullWidth

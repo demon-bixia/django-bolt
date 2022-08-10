@@ -106,7 +106,7 @@ const Applications = ({ appList }) => {
                         {app.models.map((model) => {
                             let model_name = `${app.name}_${model.name}`;
 
-                            return (<Model key={model_name} elevation={0} role="listitem">
+                            return (<Model key={model_name} elevation={1} role="listitem">
                                 <Box sx={{ flexGrow: 1, }}>
                                     <Link
                                         aria-label={model.name}

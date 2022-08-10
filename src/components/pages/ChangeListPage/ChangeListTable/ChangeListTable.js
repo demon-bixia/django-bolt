@@ -4,8 +4,8 @@ import { DataGrid } from '@mui/x-data-grid';
 import debounce from 'lodash.debounce';
 import { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from "react-redux";
-import MessageSnackBar from "../../../alerts/MessageSnackBar";
-import { selectCsrfToken } from "../../../AuthProvider";
+import MessageSnackBar from "../../../utils/alerts/MessageSnackBar";
+import { selectCsrfToken } from "../../../authentication/AuthProvider";
 import {
     closeAlert,
     fetchChangelistData,
@@ -23,7 +23,7 @@ import TableLoadingSkeleton from "./TableLoadingSkeleton";
 import TableToolbar from "./TableToolbar";
 
 const Table = styled(DataGrid)(({ theme }) => ({
-    boxShadow: theme.shadows[0],
+    boxShadow: theme.shadows[1],
     background: theme.palette.background.paper,
     border: '0',
     padding: theme.spacing(0),
@@ -193,7 +193,7 @@ const ChangeListTable = ({ model }) => {
     }, 1000);
 
     return (
-        <Box sx={{ width: '100%', height: '80vh' }}>
+        <Box sx={{ width: '100%', height: { xs: '600px', md: '80vh' } }}>
             <Box sx={{ height: '100%', }}>
                 {
                     status === 'loading' || status === 'idle' || skeletonAnimationDelay
@@ -203,6 +203,7 @@ const ChangeListTable = ({ model }) => {
                         : (
                             <>
                                 <Table
+                                    autoHeight={rows.length > 0 ? true : false}
                                     loading={rowsStatus === 'notUpdated'}
                                     rows={rows}
                                     columns={columns}

@@ -1,38 +1,39 @@
-import CssBaseline from "@mui/material/CssBaseline";
-import { ThemeProvider } from '@mui/material/styles';
-import { overrides } from "./application/theme";
+import { CssBaseline, ThemeProvider } from "@mui/material";
 
 import { Route, Routes } from "react-router-dom";
-import AuthRoutes from "./components/utils/routes/AuthRoutes";
-import ProtectedRoutes from "./components/utils/routes/ProtectedRoutes";
 
-import HomePage from "./components/pages/HomePage";
-import IndexPage from "./components/pages/IndexPage";
-import LoginPage from "./components/pages/LoginPage";
+import NotFoundError from "./components/errors/NotFoundError";
+import ChangeListPage from "./components/pages/ChangeListPage"
+import HomePage from "./components/pages/HomePage"
+import IndexPage from "./components/pages/IndexPage"
+import LoginPage from "./components/pages/LoginPage"
 
-import { TestForm } from "./components/DynamicForm";
+import AuthProvider from "./components/authentication/AuthProvider";
+import AuthRoutes from "./components/authentication/routes/AuthRoutes";
+import ProtectedRoutes from "./components/authentication/routes/ProtectedRoutes";
 
-import AuthProvider from "./components/AuthProvider";
-import ChangeListPage from './components/pages/ChangeListPage';
+import TestPage from "./components/forms/TestPage";
+
+import { overrides } from "./application/theme";
 
 // Core features:
 // round 1
-// todo create the change list page.
-// todo create the admin activity/history page.
-
-// round 2
-// todo test dynamic forms with testing library
+// todo finish the change list page.
 // todo create the add/change pages.
 
+// round 2
+// todo create the admin activity/history page.
 
 // Optimizations:
-// round 3
-// todo optimize error handling (e.g no connection, page not found, server error).
-// todo optimize for customization from server and theme overriding.
+// todo optimize error handling.
+// todo optimize customization from server and theme overriding.
 // todo optimize accessibility.
+// todo clean code and add more comments.
 
 // Future features:
-// todo (future) add dashboard and widgets support (e.g charts, lists, bookmarks).
+// idea rtl support
+// idea add dashboard and widgets support (e.g charts, lists, bookmarks).
+// idea markdown documentation support.
 
 const App = () => {
 
@@ -49,9 +50,12 @@ const App = () => {
                         <Route path="/" element={<IndexPage />}>
                             <Route path='/' element={<HomePage />} />
                             <Route path='/:appLabel/:modelName/changelist/' element={<ChangeListPage />} />
-                            <Route path="/test" element={<TestForm />} />
                         </Route>
                     </Route>
+
+                    <Route path='new_dynamic_form/test/:testName' element={<TestPage />} />
+
+                    <Route path="*" element={<NotFoundError />} />
                 </Routes>
             </AuthProvider>
         </ThemeProvider>
@@ -59,5 +63,3 @@ const App = () => {
 };
 
 export default App;
-
-

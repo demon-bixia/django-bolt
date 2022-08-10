@@ -63,8 +63,12 @@ const SearchField = styled(TextField)(({ theme }) => ({
     color: theme.palette.text.secondary,
     borderRadius: '12px',
 
+
     [theme.breakpoints.down("md")]: {
         flexGrow: 1,
+        '& .MuiOutlinedInput-root': {
+            width: '100%',
+        }
     },
 
     '& label.Mui-focused': {
@@ -149,7 +153,13 @@ const FilterMenu = ({ open, filters_list, filters, handleChange, anchorEl, handl
     const theme = useTheme();
 
     return (
-        <Menu open={open} onClose={handleClose} anchorEl={anchorEl}
+        <Menu
+            role="region"
+            id="filter_menu"
+            aria-labelledby="filter_menu_button"
+            open={open}
+            onClose={handleClose}
+            anchorEl={anchorEl}
             anchorOrigin={{
                 vertical: 'top',
                 horizontal: 'left',
@@ -208,12 +218,16 @@ const TableToolbar = (props) => {
             <TableToolbarWrap sx={{ background: props.selectionModel.length > 0 || props.selectAcross ? theme.palette.primary.light : theme.palette.background.paper }}>
                 {props.selectionModel.length > 0 || props.selectAcross
                     ? (<TableTitleWrap>
-                        <Typography variant="h5" color="text.primary"
+                        <Typography
+                            variant="h5"
+                            color="text.primary"
+                            tabIndex={1}
                             sx={{
                                 color: theme.palette.primary.dark,
                                 marginRight: theme.spacing(3),
                                 display: props.selection_counter ? 'block' : 'none'
-                            }}>
+                            }}
+                        >
                             {
                                 props.selectAcross
                                     ? (`all authors selected`)
@@ -287,7 +301,15 @@ const TableToolbar = (props) => {
                                 },
                             }}
                         />
-                        <ToolbarFilterButton variant="outlined" onClick={handleToggleMenu} sx={{ display: props.filters_list.length > 0 ? 'flex' : 'none' }}>
+                        <ToolbarFilterButton
+                            variant="outlined"
+                            aria-controls="filter_menu"
+                            id="filter_menu_button"
+                            aria-label="filter"
+                            aria-expanded={open}
+                            onClick={handleToggleMenu}
+                            sx={{ display: props.filters_list.length > 0 ? 'flex' : 'none' }}
+                        >
                             <FeatherIcon icon="filter" size={24} />
                         </ToolbarFilterButton>
                     </ToolbarActionWrap>)

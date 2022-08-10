@@ -23,7 +23,7 @@ export const themeValues = {
         }, info: {
             light: "#E0F7FA", tint: "#80DEEA", main: "#00BCD4", dark: "#006064",
         }, grey: {
-            100: "#FAFAFA", 200: "#E0E0E0", 300: "#9E9E9E", 400: "#616161", 500: "#424242"
+            100: "#fafafa", 200: "#E0E0E0", 300: "#9E9E9E", 400: "#616161", 500: "#424242"
         }, text: {
             primary: "#424242", secondary: "#9E9E9E", disabled: "#E0E0E0"
         },
@@ -31,24 +31,32 @@ export const themeValues = {
         border: "#EEEEEE",
 
         background: {
-            default: "#FAFAFA", paper: "#FFFFFF"
+            default: "#fafafa", paper: "#FFFFFF"
         },
     },
 
     // elevation system
-    shadows: ["none", // single shadow
-        "0px 1px 3px 0px rgba(5,5,5,0.1)", // 0
-        "0px 4px 6px 0px rgba(5,5,5,0.1)", // 1
-        "0px 5px 15px 0px rgba(5,5,5,0.1)", // 2
-        "0px 10px 24px 0px rgba(5,5,5,0.1)", // 3
-        "0px 15px 35px 0px rgba(5,5,5,0.1)", // 4
+    shadows: [
+        "none", //0 
+        // single shadow 
+        "0px 0px 3px 0px rgba(5,5,5,0.1), 0px 4px 8px 0px rgba(3,3,3,0.01)", // 1
+        "0px 4px 6px 0px rgba(5,5,5,0.1)", // 2
+        "0px 5px 15px 0px rgba(5,5,5,0.1)", // 3
+        "0px 10px 24px 0px rgba(5,5,5,0.1)", // 4
+        "0px 15px 35px 0px rgba(5,5,5,0.1)", // 5
+        "0px 20px 40px 0px rgba(5,5,5,0.1)", // 6
         // dual shadows
-        "0px 1px 3px 0px rgba(3,3,3,0.1), 0px 1px 2px 0px rgba(3,3,3,0.1)", // 5
-        "0px 3px 4px 0px rgba(3,3,3,0.1), 0px 2px 4px 0px rgba(3,3,3,0.1)", // 6
-        "0px 10px 20px 0px rgba(3,3,3,0.1), 0px 3px 6px 0px rgba(3,3,3,0.1)", // 7
-        "0px 15px 25px 0px rgba(3,3,3,0.1), 0px 5px 10px 0px rgba(3,3,3,0.1)", // 8
-        "0px 20px 40px 0px rgba(5,5,5,0.1)", // colorful shadows
-        "0px 15px 25px 0px rgba(255,144,0,0.1), 0px 5px 10px 0px rgba(255,144,0,0.1)", // 9
+        "rgb(145 158 171 / 20%) 0px 1px 3px 0px , rgb(145 158 171 / 12%) 0px 1px 2px -4px", // 7
+        "0px 3px 4px 0px rgba(3,3,3,0.1), 0px 2px 4px 0px rgba(3,3,3,0.1)", // 8
+        "0px 10px 20px 0px rgba(3,3,3,0.1), 0px 3px 6px 0px rgba(3,3,3,0.1)", // 9
+        "0px 15px 25px 0px rgba(3,3,3,0.1), 0px 5px 10px 0px rgba(3,3,3,0.1)", // 10
+
+        // colorful shadows
+        "0px 5px 10px 0px rgba(255,144,0,0.1), 0px 5px 10px 0px rgba(255,144,0,0.1)", // 11
+        "0px 10px 20px 0px rgba(255,144,0,0.1), 0px 3px 6px 0px rgba(255,144,0,0.1)", //12
+
+
+
     ],
 
     // spacing system
@@ -67,7 +75,7 @@ export const themeValues = {
             fontFamily: ["IBM Plex Sans", "Helvetica Neue", "Arial", "sans-serif"].join(','),
             fontWeight: 400,
             fontSize: "32px",
-            lineHeight: "4x0px",
+            lineHeight: "40px",
             letterSpacing: 0,
         }, h3: {
             fontFamily: ["IBM Plex Sans", "Helvetica Neue", "Arial", "sans-serif"].join(','),
@@ -179,5 +187,20 @@ export const overrides = createTheme({
                 },
             },
         },
+
+        MuiOutlinedInput: {
+            styleOverrides: {
+                root: {
+                    borderRadius: '12px',
+                    '& fieldset': {
+                        borderColor: themeValues.palette.border,
+                    },
+
+                    '& .MuiOutlinedInput-notchedOutline': {
+                        borderColor: themeValues.palette.border + '!important',
+                    }
+                },
+            }
+        }
     },
 });

@@ -5,6 +5,8 @@ import Paper from "@mui/material/Paper";
 import FeatherIcon from "feather-icons-react";
 import { styled, useTheme } from '@mui/system';
 import React from 'react';
+import { composeMessage } from './utils';
+import moment from "moment";
 
 
 const ActivityBackground = styled(Paper)(({ theme }) => ({
@@ -24,10 +26,41 @@ const ViewAllLink = styled(Link)(({ theme }) => ({
 }));
 
 const Activity = styled(Box)(({ theme }) => ({
-    display: 'flex', marginBottom: theme.spacing(2)
+    display: 'flex',
+    marginBottom: theme.spacing(5),
+    maxWidth: '318px'
 }));
 
-const ActivityIcon = styled(Box)(({ theme }) => ({
+const IconWrapper = styled(Box)(({ theme }) => ({
+    flex: '10%',
+    position: 'relative',
+}));
+
+const TopConnector = styled(Box)(({ theme, index }) => ({
+    width: '1px',
+    height: '50%',
+    backgroundColor: theme.palette.grey[200],
+    position: 'absolute',
+    marginLeft: 'auto',
+    marginRight: 'auto',
+    left: 0,
+    right: 12,
+    bottom: '40px',
+}));
+
+const BottomConnector = styled(Box)(({ theme }) => ({
+    width: '1px',
+    height: '50%',
+    backgroundColor: theme.palette.grey[200],
+    position: 'absolute',
+    marginLeft: 'auto',
+    marginRight: 'auto',
+    left: 0,
+    right: 12,
+    top: '40px',
+}));
+
+const ActivityIcon = styled(Box)(({ theme, index }) => ({
     width: '40px',
     height: '40px',
     borderRadius: '100%',
@@ -35,31 +68,11 @@ const ActivityIcon = styled(Box)(({ theme }) => ({
     justifyContent: "center",
     alignItems: "center",
     color: theme.palette.grey[300],
+    position: 'relative',
+    zIndex: 1000 + index,
     marginRight: theme.spacing(4),
 }));
 
-const ActivityLink = styled(Link)(({ theme }) => ({
-    color: theme.palette.text.secondary, display: 'block', maxWidth: '300px',
-}));
-
-const ConnectingLineContainer = styled(Box)(({ theme }) => ({
-    display: 'flex', marginBottom: theme.spacing(2), minHeight: '10px', height: '100%',
-}));
-
-const ConnectingLineIconMirror = styled(Box)(({ theme }) => ({
-    width: '40px', display: "flex", justifyContent: "center", alignItems: "center", position: 'relative',
-}));
-
-const ConnectingLineTextMirror = styled(Box)(({ theme }) => ({
-    flexGrow: 1,
-}));
-
-const ConnectingLine = styled(Box)(({ theme }) => ({
-    height: '100%', width: '1px', backgroundColor: theme.palette.grey[200], position: 'absolute',
-}));
-
-
-// fix connecting line
 const ActivityLog = ({ actionList }) => {
     const theme = useTheme();
 
@@ -68,25 +81,6 @@ const ActivityLog = ({ actionList }) => {
         2: ['edit', theme.palette.info.light, 'changed'],
         3: ['trash-2', theme.palette.error.light, 'deleted']
     }
-
-    const compose_message = (action) => {
-        let change_message = action['change_message'];
-        let change = change_message[0] || null;
-
-        if (change) {
-            if (action['action_flag'] === 1) return (<ActivityLink variant="body1"
-                href="#"
-                underline="none">
-                {action['user']['username']} added {change['added']['name']} {action['object_repr']}
-            </ActivityLink>); else if (action['action_flag'] === 2) return (
-                <ActivityLink variant="body1" href="#" underline="none">
-                    {action['user']['username']} changed {change['changed']['fields'].toString()} of {change['changed']['name']} {action['object_repr']}
-                </ActivityLink>);
-        } else return (<ActivityLink variant="body1" href="#" underline="none">
-            {action['user']['username']} {actionStyleMapping[action['action_flag']][2]} {action['object_repr']}
-        </ActivityLink>);
-    };
-
 
     return (
         <>
@@ -104,7 +98,7 @@ const ActivityLog = ({ actionList }) => {
                     )
 
                     : (
-                        <ActivityBackground className="activity-log" elevation={0}>
+                        <ActivityBackground className="activity-log" elevation={1}>
                             <ActivityHeader tabIndex={0} sx={{ marginBottom: theme.spacing(5) }}>
                                 <Typography sx={{ flexGrow: 1, }}
                                     variant="h5">Recent Activity</Typography>
@@ -118,26 +112,30 @@ const ActivityLog = ({ actionList }) => {
                                     : null
                                 }
                             </ActivityHeader>
+
                             {actionList.map((action, index) => (
                                 <React.Fragment key={action.id}>
                                     {index <= 4
                                         ? <Box role="list">
                                             <Activity role="listitem">
-                                                <ActivityIcon sx={{ background: actionStyleMapping[action.action_flag][1], }}>
-                                                    <FeatherIcon icon={actionStyleMapping[action.action_flag][0]} />
-                                                </ActivityIcon>
-                                                <div>
-                                                    {compose_message(action)}
+                                                <IconWrapper sx={{ flexBasis: '10%' }}>
+                                                    <TopConnector sx={{ display: index === 0 ? 'none' : 'block' }} />
+                                                    <ActivityIcon index={index} sx={{ background: actionStyleMapping[action.action_flag][1], }}>
+                                                        <FeatherIcon icon={actionStyleMapping[action.action_flag][0]} />
+                                                    </ActivityIcon>
+                                                    <BottomConnector sx={{ display: index < 4 ? 'block' : 'none' }} />
+                                                </IconWrapper>
+
+                                                <Box sx={{ flexBasis: '90%' }}>
+                                                    {composeMessage(action)}
                                                     <Typography variant="body3" component="p"
-                                                        sx={{ color: theme.palette.text.secondary }}>28-12-2022
-                                                        12:20 pm</Typography>
-                                                </div>
+                                                        sx={{ color: theme.palette.text.secondary }}
+                                                    >
+                                                        {moment(action.action_time).format('YYYY/MM/DD hh:mm A')}
+                                                    </Typography>
+                                                </Box>
                                             </Activity>
 
-                                            {index + 1 >= actionList.length ? null : <ConnectingLineContainer>
-                                                <ConnectingLineIconMirror><ConnectingLine /></ConnectingLineIconMirror>
-                                                <ConnectingLineTextMirror />
-                                            </ConnectingLineContainer>}
                                         </Box>
                                         : null
                                     }

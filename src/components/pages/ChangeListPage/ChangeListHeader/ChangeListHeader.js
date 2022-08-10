@@ -19,7 +19,7 @@ const ChangeListHeaderWrap = styled(Box)(({ theme }) => ({
 const PrimaryGradientButton = styled(Button)(({ theme }) => ({
     background: theme.palette.primaryGradient.main,
     height: '35px',
-    boxShadow: theme.shadows[0],
+    boxShadow: theme.shadows[12],
     padding: theme.spacing(5),
     borderRadius: '12px',
 }));
@@ -49,6 +49,7 @@ const ChangeListHeader = ({ model }) => {
                         <Breadcrumbs aria-label="breadcrumb" separator={<BreadcrumbSeparator />}>
                             <Link
                                 component={RouterLink}
+                                aria-label="home page"
                                 underline="none"
                                 to="/"
                                 color={theme.palette.text.primary}
@@ -58,13 +59,14 @@ const ChangeListHeader = ({ model }) => {
 
                             <Typography
                                 color={theme.palette.text.secondary}
+                                tabIndex='0'
                             >
                                 {pathnames[1]}
                             </Typography>
                         </Breadcrumbs>
 
                         {/* changelist primary button */}
-                        <PrimaryGradientButton variant="contained" >
+                        <PrimaryGradientButton variant="contained" aria-label={`Add ${model.object_name}`}>
                             Add {model.object_name}
                         </PrimaryGradientButton>
                     </>

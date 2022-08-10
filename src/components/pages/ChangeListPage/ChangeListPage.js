@@ -22,7 +22,7 @@ const ChangeListPage = () => {
     }, []);
 
     return (
-        <Box sx={{ marginBottom: theme.spacing(7) }}>
+        <Box sx={{ marginBottom: theme.spacing(7), }}>
             <ChangeListHeader
                 model={model}
             />
@@ -30,7 +30,7 @@ const ChangeListPage = () => {
                 model={model}
             />
         </Box>
-    )
+    );
 };
 
 export default ChangeListPage;

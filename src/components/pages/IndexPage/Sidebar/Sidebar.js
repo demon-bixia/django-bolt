@@ -1,10 +1,12 @@
-import { styled } from "@mui/system";
-import MuiDrawer from '@mui/material/Drawer';
-import FeatherIcon from "feather-icons-react";
-import IconButton from '@mui/material/IconButton';
 import { useState } from "react";
-import AdminLogo from "../../../../assets/logo/AdminLogoLightFilled"
+
+import AdminLogo from "../../../../assets/logo/AdminLogoLightFilled";
 import Toolbar from "../Toolbar";
+
+import { Drawer as MuiDrawer, IconButton, Link } from "@mui/material";
+import { styled } from "@mui/system";
+
+import FeatherIcon from "feather-icons-react";
 
 const drawerWidth = '240px';
 
@@ -39,6 +41,7 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
 
 const DrawerHeader = styled('div')(({ theme }) => ({
     display: 'flex', alignContent: 'start', padding: theme.spacing(6, 5, 7, 5),
+    position: 'relative',
 }));
 
 const Logo = styled('div')(() => ({
@@ -49,21 +52,55 @@ const SidebarToggleIcon = styled(FeatherIcon)(() => ({
     strokeWidth: "1.5px",
 }));
 
+const SkipLink = styled(Link)(() => ({
+    flexGrow: 2,
+    display: 'flex',
+    alignItems: 'center',
+}));
 
-// todo add skip to main content 
+
 const Sidebar = ({ appList }) => {
     const [open, setOpen] = useState(true);
+    const [LinkFocused, setLinkFocused] = useState(false);
 
+    // events
     const handleDrawerToggle = () => {
         setOpen(!open);
     };
 
+    const handleLinkFocus = () => {
+        setLinkFocused(true);
+    };
+
+    const handleLinkBlur = () => {
+        setLinkFocused(false);
+    };
+
+
     return (<>
         <Drawer variant="permanent" open={open} sx={{ display: { xs: 'none', md: 'block' }, }}>
             <DrawerHeader>
-                <Logo sx={{ display: open ? "initial" : "none" }} tabIndex={1}>
+                <SkipLink
+                    tabIndex={1}
+                    href="#mainContent"
+                    onFocus={handleLinkFocus}
+                    onBlur={handleLinkBlur}
+                    sx={{
+                        position: LinkFocused ? 'relative' : 'absolute',
+                        left: LinkFocused ? '0' : '-1000px',
+                        display: 'block'
+                    }}
+                >
+                    Skip to main content
+                </SkipLink>
+
+                <Logo
+                    sx={{ display: (!open || LinkFocused) ? "none" : "flex" }}
+                >
                     <AdminLogo aria-label="Bolt logo" width='30px' height='30px' />
                 </Logo>
+
+
                 <IconButton onClick={handleDrawerToggle} aria-label="toggle-drawer-menu ">
                     {<SidebarToggleIcon icon={open ? 'chevrons-left' : 'chevrons-right'} size={16} />}
                 </IconButton>

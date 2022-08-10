@@ -2,7 +2,7 @@ import axios from "axios";
 import config from "./config";
 
 let client = axios.create({
-    baseURL: config.url.href, timeout: 3000, withCredentials: true,
+    baseURL: config.url.href, timeout: 10000, withCredentials: true,
 });
 
 // log the error message
@@ -11,7 +11,7 @@ client.interceptors.response.use(
         return response;
     },
     error => {
-        console.log(error);
+        console.log(error.response);
         return Promise.reject(error);
     }
 );

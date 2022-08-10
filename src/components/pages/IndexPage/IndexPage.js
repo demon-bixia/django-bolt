@@ -3,29 +3,29 @@ import { styled } from "@mui/system";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Outlet } from "react-router-dom";
-import { selectUser } from "../../AuthProvider";
-import { fetchActionList, fetchAppList, selectAllActions, selectAllApps, selectStatus } from "./indexPageSlice";
+import { fetchActionList, fetchAppList, selectAllApps, selectStatus } from "./indexPageSlice";
 import Sidebar from "./Sidebar";
 import Topbar from "./Topbar";
+import NetworkError from '../../errors/NetworkError';
 
 const Layout = styled(Box)(({ theme }) => ({
-    padding: theme.spacing(0), display: "flex", boxSizing: 'border-box',
+    padding: theme.spacing(0), display: "flex",
+    boxSizing: 'border-box',
 }));
 
 const VerticalWrap = styled(Box)(({ theme }) => ({
     display: "flex", flexDirection: "column", flexGrow: 1,
     margin: theme.spacing(6, 7, 0, 7),
-
     [theme.breakpoints.down("md")]: {
         margin: theme.spacing(11, 5, 5, 5),
     }
 }));
 
+// todo add appbar for desktop.
 const IndexPage = (props) => {
     const appList = useSelector(selectAllApps);
-    const actionList = useSelector(selectAllActions);
+    // todo remove top menu from changelist page
     const status = useSelector(selectStatus);
-    const user = useSelector(selectUser);
     const dispatch = useDispatch();
 
     useEffect(() => {
@@ -35,17 +35,33 @@ const IndexPage = (props) => {
         }
     }, []);
 
+    let content;
 
-    return (
-        status === 'success' || status === 'failure'
-            ? <Layout>
+    switch (status) {
+        case "success":
+            content = (<Layout >
                 <Sidebar appList={appList} />
                 <Topbar appList={appList} />
-                <VerticalWrap>
+                <VerticalWrap tabIndex='-1' id="mainContent">
                     <Outlet />
                 </VerticalWrap>
-            </Layout>
-            : null
+            </Layout>);
+            break;
+
+        case "failure":
+            content = (
+                <NetworkError />
+            )
+            break;
+
+        default:
+            content = null;
+    }
+
+    return (
+        <>
+            {content}
+        </>
     );
 };
 

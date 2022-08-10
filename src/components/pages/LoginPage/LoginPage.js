@@ -1,5 +1,5 @@
 import { styled } from "@mui/system";
-import DynamicForm from "../../DynamicForm/DynamicForm";
+import DynamicForm from "../../forms/DynamicForm";
 import LoginForm from "./LoginForm";
 
 const Layout = styled("div")(({ theme }) => ({
@@ -17,7 +17,7 @@ const LoginPage = () => {
 
     return (
         <Layout component="main">
-            <DynamicForm formUrl='/login/' FormComponent={LoginForm} />
+            <DynamicForm url='/login/' FormComponent={LoginForm} />
         </Layout>
     );
 };
