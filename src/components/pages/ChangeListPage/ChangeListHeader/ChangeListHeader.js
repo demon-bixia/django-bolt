@@ -1,13 +1,11 @@
 import Box from '@mui/material/Box';
-import Breadcrumbs from '@mui/material/Breadcrumbs';
-import Button from "@mui/material/Button";
-import Link from '@mui/material/Link';
-import Typography from '@mui/material/Typography';
-import { styled, useTheme } from '@mui/system';
+import { styled } from '@mui/system';
 import { useSelector } from 'react-redux';
-import { Link as RouterLink, useLocation } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import { selectStatus } from '../../IndexPage';
-
+import BreadcrumbsNav from "../../../utils/BreadcrumbsNav";
+import PrimaryGradientButton from "../../../utils/buttons/PrimaryGradientButton";
+import { Link as RouterLink, useParams } from "react-router-dom";
 
 const ChangeListHeaderWrap = styled(Box)(({ theme }) => ({
     display: 'flex',
@@ -16,28 +14,12 @@ const ChangeListHeaderWrap = styled(Box)(({ theme }) => ({
     marginBottom: theme.spacing(6),
 }));
 
-const PrimaryGradientButton = styled(Button)(({ theme }) => ({
-    background: theme.palette.primaryGradient.main,
-    height: '35px',
-    boxShadow: theme.shadows[12],
-    padding: theme.spacing(5),
-    borderRadius: '12px',
-}));
-
-
-const BreadcrumbSeparator = styled(Box)(({ theme }) => ({
-    width: '3px',
-    height: '3px',
-    marginTop: '1px',
-    borderRadius: '100%',
-    background: theme.palette.grey[300],
-}));
-
 const ChangeListHeader = ({ model }) => {
-    const theme = useTheme();
     const location = useLocation();
-    const pathnames = location.pathname.split('/').filter((x) => x);
+    const { appLabel, modelName } = useParams();
     const status = useSelector(selectStatus);
+    const pathnames = location.pathname.split('/').filter((x) => x);
+    const url = `/${appLabel}/${modelName}/add/`;
 
     return (
         <ChangeListHeaderWrap>
@@ -46,36 +28,23 @@ const ChangeListHeader = ({ model }) => {
                 ? (
                     <>
                         {/* breadcrumb navigation */}
-                        <Breadcrumbs aria-label="breadcrumb" separator={<BreadcrumbSeparator />}>
-                            <Link
-                                component={RouterLink}
-                                aria-label="home page"
-                                underline="none"
-                                to="/"
-                                color={theme.palette.text.primary}
-                            >
-                                Home
-                            </Link>
-
-                            <Typography
-                                color={theme.palette.text.secondary}
-                                tabIndex='0'
-                            >
-                                {pathnames[1]}
-                            </Typography>
-                        </Breadcrumbs>
+                        <BreadcrumbsNav pathnames={pathnames} />
 
                         {/* changelist primary button */}
-                        <PrimaryGradientButton variant="contained" aria-label={`Add ${model.object_name}`}>
+                        <PrimaryGradientButton
+                            variant="contained"
+                            aria-label={`Add ${model.object_name}`}
+                            component={RouterLink}
+                            to={url}
+                        >
                             Add {model.object_name}
                         </PrimaryGradientButton>
                     </>
                 )
                 : null
             }
-        </ChangeListHeaderWrap >
+        </ChangeListHeaderWrap>
     );
-
 };
 
 export default ChangeListHeader;

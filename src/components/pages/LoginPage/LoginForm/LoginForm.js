@@ -77,7 +77,7 @@ const InputComponent = styled(DynamicField)(({ theme }) => ({
     marginBottom: theme.spacing(4),
 }));
 
-const LoginForm = ({ status, serializerFields, handleFormSubmit, handleRemoveNonFieldErrors, nonFieldErrors, ...props }) => {
+const LoginForm = ({ status, submitStatus, serializerFields, handleFormSubmit, handleRemoveNonFieldErrors, nonFieldErrors, ...props }) => {
     const navigate = useNavigate();
     const location = useLocation();
     const dispatch = useDispatch();
@@ -113,7 +113,6 @@ const LoginForm = ({ status, serializerFields, handleFormSubmit, handleRemoveNon
                     dispatch(setUser(response.data['user']));
                     // refresh csrfToken
                     dispatch(fetchCsrfToken());
-
                     // then redirect to the route the client came from
                     if (location.state?.from) {
                         navigate(location.state.from);

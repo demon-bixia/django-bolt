@@ -98,7 +98,7 @@ const ActivityLog = ({ actionList }) => {
                     )
 
                     : (
-                        <ActivityBackground className="activity-log" elevation={1}>
+                        <ActivityBackground className="activity-log" elevation={0}>
                             <ActivityHeader tabIndex={0} sx={{ marginBottom: theme.spacing(5) }}>
                                 <Typography sx={{ flexGrow: 1, }}
                                     variant="h5">Recent Activity</Typography>

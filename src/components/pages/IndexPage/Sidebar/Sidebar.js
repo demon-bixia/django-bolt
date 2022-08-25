@@ -1,7 +1,7 @@
 import { useState } from "react";
 
 import AdminLogo from "../../../../assets/logo/AdminLogoLightFilled";
-import Toolbar from "../Toolbar";
+import DrawerMenu from "../DrawerMenu";
 
 import { Drawer as MuiDrawer, IconButton, Link } from "@mui/material";
 import { styled } from "@mui/system";
@@ -100,12 +100,11 @@ const Sidebar = ({ appList }) => {
                     <AdminLogo aria-label="Bolt logo" width='30px' height='30px' />
                 </Logo>
 
-
                 <IconButton onClick={handleDrawerToggle} aria-label="toggle-drawer-menu ">
                     {<SidebarToggleIcon icon={open ? 'chevrons-left' : 'chevrons-right'} size={16} />}
                 </IconButton>
             </DrawerHeader>
-            <Toolbar appList={appList} open={open} />
+            <DrawerMenu appList={appList} open={open} />
         </Drawer>
     </>);
 };

@@ -7,10 +7,10 @@ import DateTimeField from "./fields/DateTimeField";
 import DictField from "./fields/DictField";
 import DurationField from "./fields/DurationField";
 import FileField from "./fields/FileField";
+import JSONValueField from "./fields/JSONValueField";
 import ListField from "./fields/ListField";
 import PasswordField from "./fields/PasswordField";
 import TimeField from "./fields/TimeField/TimeField";
-import JSONValueField from "./fields/JSONValueField";
 
 // checks whether the field is compoiste of multiple field or not
 const isComposite = (field) => {
@@ -102,6 +102,7 @@ export const getInputProps = serializerField => {
 
     // figure out whether or not to require the input field
     let required = true;
+
     if (serializerField.attrs['allow_blank'] || serializerField.attrs['allow_null'] || Boolean(serializerField.attrs['default'])) {
         required = false;
     }
@@ -110,7 +111,11 @@ export const getInputProps = serializerField => {
         required = true;
     }
 
-    inputProps.required = required
+    if (serializerField.attrs.choices) {
+        required = true;
+    }
+
+    inputProps.required = required;
 
     // set max_length and min_length for charFields
     if (['CharField', 'EmailField', 'RegexField', 'SlugField', 'URLField', "IPAddressField"].includes(serializerField.type)) {
@@ -155,6 +160,14 @@ export const getStartingValues = serializerFields => {
     return values;
 }
 
+// get the current values of every field
+export const getCurrentValues = serializerFields => {
+    let values = {};
+    for (let serializerField of serializerFields) {
+        values[serializerField.name] = serializerField.attrs.current_value;
+    }
+    return values;
+}
 
 // get the value of the field based on field type
 export const getChangeValue = (event, field = null) => {

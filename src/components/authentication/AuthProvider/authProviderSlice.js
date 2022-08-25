@@ -13,6 +13,12 @@ export const fetchUser = createAsyncThunk('auth/fetchUser', async () => {
     if (response['status'] === 200) return response['data']['user'];
 });
 
+export const logoutUser = createAsyncThunk('auth/logoutUser', async () => {
+    const response = await client.get('/logout/');
+    if (response.status === 200) {
+        return response;
+    }
+});
 
 // Slice
 export const authProviderSlice = createSlice({
@@ -42,6 +48,7 @@ export const authProviderSlice = createSlice({
                 state.csrfToken = action.payload;
                 Cookies.set('csrftoken', action.payload);
             })
+
             .addCase(fetchUser.fulfilled, (state, action) => {
                 state.user = action.payload;
                 Cookies.set('bolt-user', JSON.stringify(action.payload));
@@ -52,6 +59,18 @@ export const authProviderSlice = createSlice({
             })
             .addCase(fetchUser.rejected, state => {
                 state.status = 'failure';
+            })
+
+            .addCase(logoutUser.pending, state => {
+                state.status = 'loading';
+            })
+            .addCase(logoutUser.rejected, state => {
+                state.status = 'failure';
+            })
+            .addCase(logoutUser.fulfilled, state => {
+                state.status = 'success';
+                Cookies.set('bolt-user', JSON.stringify(null));
+                state.user = null;
             })
     }
 });

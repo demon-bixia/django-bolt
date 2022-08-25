@@ -16,6 +16,7 @@ import Typography from "@mui/material/Typography";
 import { styled, useTheme } from "@mui/system";
 import FeatherIcon from "feather-icons-react";
 import { useState } from "react";
+import SearchField from "../../../../forms/fields/SearchField";
 
 
 const ChevronDown = () => {
@@ -55,40 +56,9 @@ const ToolbarActionWrap = styled(Box)(({ theme }) => ({
     [theme.breakpoints.down("md")]: {
         flexGrow: 1,
         width: '100%',
-
     },
 }));
 
-const SearchField = styled(TextField)(({ theme }) => ({
-    color: theme.palette.text.secondary,
-    borderRadius: '12px',
-
-
-    [theme.breakpoints.down("md")]: {
-        flexGrow: 1,
-        '& .MuiOutlinedInput-root': {
-            width: '100%',
-        }
-    },
-
-    '& label.Mui-focused': {
-        color: theme.palette.text.secondary,
-    },
-
-    '& .MuiOutlinedInput-root': {
-        height: '49px',
-
-        '& fieldset': {
-            borderColor: theme.palette.border,
-        },
-        '&:hover fieldset': {
-            borderColor: theme.palette.border,
-        },
-        '&.Mui-focused fieldset': {
-            borderColor: theme.palette.border,
-        },
-    },
-}));
 
 const ToolbarFilterButton = styled(Button)(({ theme }) => ({
     borderColor: theme.palette.border,
@@ -217,10 +187,10 @@ const TableToolbar = (props) => {
         <>
             <TableToolbarWrap sx={{ background: props.selectionModel.length > 0 || props.selectAcross ? theme.palette.primary.light : theme.palette.background.paper }}>
                 {props.selectionModel.length > 0 || props.selectAcross
+                    /* selection on */
                     ? (<TableTitleWrap>
                         <Typography
                             variant="h5"
-                            color="text.primary"
                             tabIndex={1}
                             sx={{
                                 color: theme.palette.primary.dark,
@@ -250,14 +220,19 @@ const TableToolbar = (props) => {
                         </Link>
                     </TableTitleWrap>)
 
+                    /* selection off */
                     : (<TableTitleWrap>
-                        <Typography variant="h5" color="text.primary"
-                            sx={{ color: theme.palette.text.primary }}
+                        <Typography variant="h5"
+                            sx={{
+                                color: theme.palette.text.primary,
+                                fontWeight: '500',
+                            }}
                         >
                             {props.modelName} List
                         </Typography>
                     </TableTitleWrap>)
                 }
+
                 {props.selectionModel.length > 0 || props.selectAcross
                     /* perform actions */
                     ? (<ToolbarActionWrap>

@@ -22,6 +22,7 @@ export const performAction = createAsyncThunk('changelist/performAction', async 
     }
 });
 
+// Slice
 const initialState = {
     // status
     status: 'idle',
@@ -55,8 +56,6 @@ const initialState = {
     }
 };
 
-
-// Slice
 export const changeListSlice = createSlice({
     name: 'changelist',
 

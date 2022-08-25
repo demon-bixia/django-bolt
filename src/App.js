@@ -15,16 +15,14 @@ import ProtectedRoutes from "./components/authentication/routes/ProtectedRoutes"
 import TestPage from "./components/forms/TestPage";
 
 import { overrides } from "./application/theme";
+import FormPage from "./components/pages/FormPage";
 
 // Core features:
-// round 1
-// todo finish the change list page.
-// todo create the add/change pages.
-
 // round 2
 // todo create the admin activity/history page.
 
 // Optimizations:
+// todo organize color variables better.
 // todo optimize error handling.
 // todo optimize customization from server and theme overriding.
 // todo optimize accessibility.
@@ -34,6 +32,8 @@ import { overrides } from "./application/theme";
 // idea rtl support
 // idea add dashboard and widgets support (e.g charts, lists, bookmarks).
 // idea markdown documentation support.
+// idea add changelist editing.
+// idea add date hierarchy
 
 const App = () => {
 
@@ -49,6 +49,8 @@ const App = () => {
                     <Route element={<ProtectedRoutes />}>
                         <Route path="/" element={<IndexPage />}>
                             <Route path='/' element={<HomePage />} />
+                            <Route path='/:appLabel/:modelName/:action/' element={<FormPage />} />
+                            <Route path='/:appLabel/:modelName/:objectId/:action/' element={<FormPage />} />
                             <Route path='/:appLabel/:modelName/changelist/' element={<ChangeListPage />} />
                         </Route>
                     </Route>

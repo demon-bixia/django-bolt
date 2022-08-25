@@ -34,9 +34,6 @@ export const constructColumns = (payload) => {
         else
             newColumn['align'] = 'left';
 
-        if (payload.config.list_editable.includes(newColumn.field))
-            newColumn['editable'] = true;
-
         columns.push({
             ...newColumn,
             type: type,

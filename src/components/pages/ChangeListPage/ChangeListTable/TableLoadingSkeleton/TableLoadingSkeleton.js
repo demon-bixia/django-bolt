@@ -1,31 +1,13 @@
 import Box from "@mui/material/Box";
-import { styled, useTheme } from "@mui/system";
-
-
-
-const LoadingBox = styled(Box)(({ theme }) => ({
-    background: `linear-gradient(170deg, ${theme.palette.grey[200]} 0%, ${theme.palette.border} 90% ) `,
-    borderRadius: '12px',
-
-    animation: 'loading-animation 1s infinite ease',
-    backgroundSize: '200% 100%',
-
-    '@keyframes loading-animation': {
-        '0%': {
-            backgroundPosition: '200% 0',
-        },
-        '100%': {
-            backgroundPosition: '0 0',
-        }
-    }
-}));
+import {useTheme} from "@mui/system";
+import LoadingBox from "../../../../utils/LoadingBox";
 
 
 const TableLoadingSkeleton = (tableWidth) => {
     const theme = useTheme();
 
     return (
-        <Box sx={{ width: '100%', height: 'auto', borderRadius: '12px', padding: theme.spacing(5), background: theme.palette.background.paper, display: 'flex', flexDirection: 'column', boxShadow: theme.shadows[1] }}>
+        <Box sx={{ width: '100%', height: 'auto', borderRadius: '12px', padding: theme.spacing(5), background: theme.palette.background.paper, display: 'flex', flexDirection: 'column', boxShadow: theme.shadows[0] }}>
             {/* table toolbar */}
             <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', marginBottom: theme.spacing(6) }}>
                 <Box sx={{ flexGrow: '1' }}>

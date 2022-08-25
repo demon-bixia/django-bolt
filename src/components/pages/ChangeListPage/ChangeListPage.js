@@ -19,7 +19,7 @@ const ChangeListPage = () => {
         return () => {
             dispatch(resetChangeList());
         };
-    }, []);
+    }, [modelName]);
 
     return (
         <Box sx={{ marginBottom: theme.spacing(7), }}>

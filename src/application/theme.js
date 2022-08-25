@@ -1,7 +1,6 @@
 import { createTheme } from "@mui/material/styles";
 
 
-// todo organize color variables better.
 export const themeValues = {
     // color system
     palette: {
@@ -31,7 +30,7 @@ export const themeValues = {
         border: "#EEEEEE",
 
         background: {
-            default: "#fafafa", paper: "#FFFFFF"
+            default: "#F9FBFB", paper: "#FFFFFF"
         },
     },
 
@@ -54,9 +53,6 @@ export const themeValues = {
         // colorful shadows
         "0px 5px 10px 0px rgba(255,144,0,0.1), 0px 5px 10px 0px rgba(255,144,0,0.1)", // 11
         "0px 10px 20px 0px rgba(255,144,0,0.1), 0px 3px 6px 0px rgba(255,144,0,0.1)", //12
-
-
-
     ],
 
     // spacing system

@@ -4,8 +4,9 @@ import { DataGrid } from '@mui/x-data-grid';
 import debounce from 'lodash.debounce';
 import { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from "react-redux";
-import MessageSnackBar from "../../../utils/alerts/MessageSnackBar";
 import { selectCsrfToken } from "../../../authentication/AuthProvider";
+import MessageSnackBar from "../../../utils/alerts/MessageSnackBar";
+import { selectAlertInfo, setAlertInfo } from "../../FormPage/formPageSlice";
 import {
     closeAlert,
     fetchChangelistData,
@@ -23,7 +24,7 @@ import TableLoadingSkeleton from "./TableLoadingSkeleton";
 import TableToolbar from "./TableToolbar";
 
 const Table = styled(DataGrid)(({ theme }) => ({
-    boxShadow: theme.shadows[1],
+    boxShadow: theme.shadows[0],
     background: theme.palette.background.paper,
     border: '0',
     padding: theme.spacing(0),
@@ -79,7 +80,6 @@ const ChangeListTable = ({ model }) => {
     // delay for the skeleton animation
     const [skeletonAnimationDelay, setSkeletonAnimationDelay] = useState(true);
 
-
     // csrfToken used for post requests
     const csrfToken = useSelector(selectCsrfToken);
 
@@ -103,6 +103,9 @@ const ChangeListTable = ({ model }) => {
 
         alertInfo,
     } = useSelector(selectChangeListData);
+
+    // add form alerts
+    const formAlertInfo = useSelector(selectAlertInfo);
 
     const dispatch = useDispatch();
 
@@ -154,7 +157,14 @@ const ChangeListTable = ({ model }) => {
         dispatch(setSorting(newSorting));
     }, [columns, sorting]);
 
-    const handleCloseAlert = () => dispatch(closeAlert());
+    const handleCloseAlert = () => {
+        dispatch(closeAlert());
+        dispatch(setAlertInfo({
+            open: false,
+            severity: 'success',
+            message: '',
+        }))
+    }
 
     useEffect(() => {
         // if the table is empty fetch the table data.
@@ -256,6 +266,11 @@ const ChangeListTable = ({ model }) => {
                                 />
                                 <MessageSnackBar
                                     {...alertInfo}
+                                    handleClose={handleCloseAlert}
+                                />
+
+                                <MessageSnackBar
+                                    {...formAlertInfo}
                                     handleClose={handleCloseAlert}
                                 />
                             </>

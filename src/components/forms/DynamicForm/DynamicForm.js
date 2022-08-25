@@ -1,20 +1,24 @@
-import { useEffect, useState } from 'react';
+import { forwardRef, useEffect, useState } from 'react';
 import { useSelector } from "react-redux";
 import client from "../../../application/client";
-import { selectCsrfToken } from "../../authentication/AuthProvider/authProviderSlice";
-import { getChangeValue, getRequestData, getStartingValues } from "../utils";
+import { selectCsrfToken } from "../../authentication/AuthProvider";
+import { getChangeValue, getRequestData, getStartingValues, getCurrentValues } from "../utils";
 
 // a form component that fetches fields dynamically from the server and manages their state.
-const DynamicForm = ({ url, method = "post", FormComponent }) => {
+const DynamicForm = forwardRef(({ url, method = "post", FormComponent, formFields = null, ...props }, ref) => {
     const [status, setStatus] = useState('idle');
     const [serializerFields, setSerializerFields] = useState([]);
     const [values, setValues] = useState({});
     const [errors, setErrors] = useState({});
     const [nonFieldErrors, setNonFieldErrors] = useState([])
     const csrfToken = useSelector(selectCsrfToken) || '';
+    const [submitStatus, setSubmitStatus] = useState('idle');
 
     const handleValuesChange = (event, fieldName, field = null) => {
         setValues({ ...values, [fieldName]: getChangeValue(event, field) });
+        if (submitStatus !== 'idle') {
+            setSubmitStatus('idle');
+        }
     };
 
     const handleRemoveErrors = (event, fieldName, childKey = null) => {
@@ -35,9 +39,16 @@ const DynamicForm = ({ url, method = "post", FormComponent }) => {
         return (async () => {
             try {
                 const [data, headers] = getRequestData(serializerFields, values);
-                const response = await client[method.toLowerCase()](url, data, { headers: { ...headers, 'X-CSRFToken': csrfToken } });
+                const response = await client[method.toLowerCase()](url, data, {
+                    headers: {
+                        ...headers,
+                        'X-CSRFToken': csrfToken
+                    }
+                });
+                setSubmitStatus('success');
                 return response;
             } catch (error) {
+                setSubmitStatus('failure');
                 setNonFieldErrors(error.response.data['non_field_errors'] || []);
                 setErrors(error.response.data || {});
                 return Promise.reject(error);
@@ -49,12 +60,24 @@ const DynamicForm = ({ url, method = "post", FormComponent }) => {
         (async () => {
             if (status === 'idle') {
                 try {
-                    const response = await client.get(url);
-                    setSerializerFields(response.data.fields);
-                    setValues(getStartingValues(response.data.fields));
+                    let fields = null;
+
+                    if (formFields) {
+                        fields = formFields;
+                    } else {
+                        let response = await client.get(url);
+                        fields = response.data.fields;
+                    }
+
+                    setSerializerFields(fields);
+
+                    if (method === 'put')
+                        setValues(getCurrentValues(fields));
+                    else
+                        setValues(getStartingValues(fields));
+
                     setStatus('success');
-                }
-                catch (error) {
+                } catch (error) {
                     setStatus('failure');
                 }
             }
@@ -64,6 +87,7 @@ const DynamicForm = ({ url, method = "post", FormComponent }) => {
     return (
         <FormComponent
             status={status}
+            submitStatus={submitStatus}
             serializerFields={serializerFields}
             values={values}
             errors={errors}
@@ -72,8 +96,10 @@ const DynamicForm = ({ url, method = "post", FormComponent }) => {
             handleFormSubmit={handleFormSubmit}
             handleRemoveErrors={handleRemoveErrors}
             handleRemoveNonFieldErrors={handleRemoveNonFieldErrors}
+            {...(ref ? { formRef: ref } : {})}
+            {...props}
         />
     );
-};
+});
 
 export default DynamicForm;

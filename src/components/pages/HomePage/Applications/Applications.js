@@ -1,14 +1,7 @@
+import { Box, IconButton, Link, Menu, MenuItem, Pagination, Paper, Typography } from "@mui/material";
 import { styled, useTheme } from "@mui/system";
-import Box from '@mui/material/Box';
-import Paper from '@mui/material/Paper';
-import Typography from '@mui/material/Typography';
-import Link from '@mui/material/Link';
-import IconButton from '@mui/material/IconButton';
 import FeatherIcon from "feather-icons-react";
-import Menu from '@mui/material/Menu';
-import MenuItem from '@mui/material/MenuItem';
 import { useEffect, useState } from "react";
-import Pagination from '@mui/material/Pagination';
 import { Link as RouterLink } from "react-router-dom";
 
 
@@ -16,7 +9,7 @@ const ApplicationListWrap = styled(Box)(({ theme }) => ({
     width: 'auto', flexGrow: 1,
 
     [theme.breakpoints.down("md")]: {
-        width: '100%', marginTop: theme.spacing(6), marginLeft: theme.spacing(0), order: 1,
+        width: '100%', marginTop: theme.spacing(7), marginLeft: theme.spacing(0), order: 1,
     },
 }));
 
@@ -106,7 +99,7 @@ const Applications = ({ appList }) => {
                         {app.models.map((model) => {
                             let model_name = `${app.name}_${model.name}`;
 
-                            return (<Model key={model_name} elevation={1} role="listitem">
+                            return (<Model key={model_name} elevation={0} role="listitem">
                                 <Box sx={{ flexGrow: 1, }}>
                                     <Link
                                         aria-label={model.name}
@@ -128,8 +121,29 @@ const Applications = ({ appList }) => {
                                 <Menu open={menuToggles[model_name] || false}
                                     anchorEl={anchorElements[model_name]}
                                     onClose={() => handleMenuClose(model_name)}>
-                                    <MenuItem>Add a new {model.name.slice(0, -1)}</MenuItem>
-                                    <MenuItem>Update existing {model.name}</MenuItem>
+                                    <MenuItem>
+                                        <Link
+                                            underline="none"
+                                            aria-label={`add ${model.name}`}
+                                            component={RouterLink}
+                                            to={`/${app.app_label}/${model.name}/add/`}
+                                            sx={{ color: theme.palette.text.primary }}
+
+                                        >
+                                            Add a new {model.name.slice(0, -1)}
+                                        </Link>
+                                    </MenuItem>
+                                    <MenuItem>
+                                        <Link
+                                            underline="none"
+                                            aria-label={`${model.name} changelist`}
+                                            component={RouterLink}
+                                            to={`/${app.app_label}/${model.name}/changelist/`}
+                                            sx={{ color: theme.palette.text.primary }}
+                                        >
+                                            Update existing {model.name}
+                                        </Link>
+                                    </MenuItem>
                                 </Menu>
                             </Model>);
                         })}

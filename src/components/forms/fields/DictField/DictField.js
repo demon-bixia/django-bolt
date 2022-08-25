@@ -2,7 +2,7 @@ import { Alert, AlertTitle, Box, IconButton, TextField, Typography } from "@mui/
 import { styled, useTheme } from "@mui/system";
 import FeatherIcon from "feather-icons-react";
 import { useEffect, useState } from "react";
-import GreyButton from "../../../utils/GreyButton";
+import GreyButton from "../../../utils/buttons/GreyButton";
 import { getChangeValue, getInputProps, getMuiInputComponent, getStartingValues } from "../../utils";
 
 const Icon = styled(FeatherIcon)(({ theme }) => ({
