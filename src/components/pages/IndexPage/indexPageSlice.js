@@ -2,9 +2,7 @@ import { createAsyncThunk, createEntityAdapter, createSlice, isAnyOf, isFulfille
 import client from "../../../application/client";
 
 // Adapters
-const actionListAdapter = createEntityAdapter({
-    sortComparer: (a, b) => a['action_time'].localeCompare(b['action_time']),
-});
+const actionListAdapter = createEntityAdapter({});
 
 // Thunks
 export const fetchAppList = createAsyncThunk('index/fetchAppList', async () => {
@@ -13,20 +11,29 @@ export const fetchAppList = createAsyncThunk('index/fetchAppList', async () => {
 });
 
 export const fetchActionList = createAsyncThunk('index/fetchActionList', async () => {
-    const response = await client.get('/admin_log/');
+    const response = await client.get('/admin_log/?o=-action_time');
     if (response['status'] === 200) return response.data['action_list'];
 });
 
 // Slice
+const initialState = {
+    appList: [],
+    actionList: actionListAdapter.getInitialState(),
+    status: 'idle',
+};
+
 export const indexPageSlice = createSlice({
     name: 'index',
 
-    initialState: {
-        appList: [],
-        actionList: actionListAdapter.getInitialState(),
-        status: 'idle',
-    },
+    initialState: initialState,
 
+    reducers: {
+        resetIndexPage(state) {
+            for (let [key, value] of Object.entries(initialState)) {
+                state[key] = value;
+            }
+        }
+    },
 
     extraReducers(builder) {
         builder
@@ -61,4 +68,8 @@ export const selectModelByName = (state, appLabel, modelName) => {
     }
 };
 
+// Actions
+export const { resetIndexPage } = indexPageSlice.actions;
+
+// Reducer
 export default indexPageSlice.reducer;

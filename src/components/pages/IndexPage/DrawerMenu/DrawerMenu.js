@@ -22,7 +22,7 @@ const SidebarActionList = styled(List)(({ theme }) => ({
     },
 
     ".MuiListItemButton-root": {
-        padding: theme.spacing(3, 5, 3, 5), borderRadius: "8px", ".feather": {
+        padding: theme.spacing(3, 5, 3, 5), ".feather": {
             color: theme.palette.grey[300], strokeWidth: "1.5px",
         },
     },
@@ -89,7 +89,7 @@ const DrawerMenu = ({ appList, open, type }) => {
     return (<>
         {/* actions */}
         <SidebarActionList
-            sx={{ margin: conditionalStyle(theme.spacing(0, 5, 5, 5), theme.spacing(1)) }}
+            sx={{ margin: open ? conditionalStyle(theme.spacing(0, 5, 5, 5), theme.spacing(1)) : theme.spacing(0) }}
             subheader={<ListSubheader
                 tabIndex={0}
                 aria-label="actions list subheader"
@@ -99,16 +99,15 @@ const DrawerMenu = ({ appList, open, type }) => {
                 { "text": "HomePage", "icon": "home", "url": '/' },
                 { "text": "View site", "icon": "external-link", "url": config.siteUrl, 'type': 'native' },
                 { "text": "Documentation", "icon": "book", "url": 'https://github.com/demon-bixia/django-bolt', 'type': 'native' },
-                { "text": "Activity", "icon": "activity", "url": '/' },
+                { "text": "Activity", "icon": "activity", "url": '/Activity/' },
                 { "text": "Logout", "icon": "log-out", "url": "/", "onClick": handleUserLogout }
             ].map((item, index) => (<ListItem sx={{ display: 'block' }} key={index}>
                 <ListItemButton
                     to={item.url}
                     component={item.type === 'native' ? 'a' : RouterLink}
-                    sx={{ justifyContent: conditionalStyle((open ? 'start' : 'center'), "start") }}
+                    sx={{ justifyContent: conditionalStyle((open ? 'start' : 'center'), "start"), borderRadius: open ? '8px' : '0px' }}
                     onClick={item.onClick ? item.onClick : () => { }}
                     aria-label={item.text}
-
                     {...(item.type === 'native' ? { target: "_blank" } : null)}
                 >
                     <ListItemIcon sx={{
@@ -124,66 +123,67 @@ const DrawerMenu = ({ appList, open, type }) => {
         </SidebarActionList>
 
         {/* applications */}
-        {appList.length <= 0 ? null :
-            <SidebarApplicationList sx={{
-                display: conditionalStyle((open ? 'auto' : 'none'), 'auto'),
-                margin: conditionalStyle(theme.spacing(0, 5, 5, 5), theme.spacing(1))
-            }}
-                subheader={
-                    <ListSubheader disableSticky={true} tabIndex={0}
-                        aria-label="applications list subheader"
-                    >
-                        Applications
-                    </ListSubheader>
-                }>
-
-                {appList.map((app, index) => (<ListItem sx={{ display: 'block' }} key={app.name}>
-                    <ListItemButton
-                        aria-expanded={applicationMenuCollapse[app.name]}
-                        id={`button_${index}`}
-                        aria-controls={`menu_${index}`}
-                        className="main-menu-item"
-                        onClick={() => handleToggleCollapse(app.name)}
-                        sx={{ justifyContent: conditionalStyle((open ? 'start' : 'center'), 'start') }}
-                    >
-                        <ListItemText primary={app.name.replace(/_/g, ' ')} />
-                        <FeatherIcon
-                            icon={applicationMenuCollapse[app.name] ? "chevron-down" : "chevron-right"}
-                            size={16}
-                        />
-                    </ListItemButton>
-
-                    {/* models */}
-                    {appList ? (<Collapse id={`menu_${index}`} role="region" aria-labelledby={`button_${index}`} in={applicationMenuCollapse[app.name]} timeout="auto" unmountOnExit>
-                        <List
-                            component="div"
-                            disablePadding
-                            sx={{ display: conditionalStyle((open ? 'auto' : 'none'), "auto") }}
+        {
+            appList.length <= 0 ? null :
+                <SidebarApplicationList sx={{
+                    display: conditionalStyle((open ? 'auto' : 'none'), 'auto'),
+                    margin: conditionalStyle(theme.spacing(0, 5, 5, 5), theme.spacing(1))
+                }}
+                    subheader={
+                        <ListSubheader disableSticky={true} tabIndex={0}
+                            aria-label="applications list subheader"
                         >
-                            {
-                                app['models'].map((model) => (
-                                    <ListItemButton
-                                        className="sub-menu-item"
-                                        key={model.name}
-                                        sx={{ pl: 4, justifyContent: conditionalStyle((open ? 'start' : 'center'), "start") }}
-                                        component={RouterLink}
-                                        to={`/${app.app_label}/${model.name}/changelist/`}
-                                    >
-                                        <ListItemIcon
-                                            sx={{
-                                                mr: conditionalStyle((open ? theme.spacing(3) : 'auto'),
-                                                    theme.spacing(3))
-                                            }}>
-                                            <span className="dot"></span>
-                                        </ListItemIcon>
-                                        <ListItemText primary={model.name} />
-                                    </ListItemButton>
-                                ))
-                            }
-                        </List>
-                    </Collapse>) : null}
-                </ListItem>))}
-            </SidebarApplicationList>
+                            Applications
+                        </ListSubheader>
+                    }>
+
+                    {appList.map((app, index) => (<ListItem sx={{ display: 'block' }} key={app.name}>
+                        <ListItemButton
+                            aria-expanded={applicationMenuCollapse[app.name]}
+                            id={`button_${index}`}
+                            aria-controls={`menu_${index}`}
+                            className="main-menu-item"
+                            onClick={() => handleToggleCollapse(app.name)}
+                            sx={{ justifyContent: conditionalStyle((open ? 'start' : 'center'), 'start') }}
+                        >
+                            <ListItemText primary={app.name.replace(/_/g, ' ')} />
+                            <FeatherIcon
+                                icon={applicationMenuCollapse[app.name] ? "chevron-down" : "chevron-right"}
+                                size={16}
+                            />
+                        </ListItemButton>
+
+                        {/* models */}
+                        {appList ? (<Collapse id={`menu_${index}`} role="region" aria-labelledby={`button_${index}`} in={applicationMenuCollapse[app.name]} timeout="auto" unmountOnExit>
+                            <List
+                                component="div"
+                                disablePadding
+                                sx={{ display: conditionalStyle((open ? 'auto' : 'none'), "auto") }}
+                            >
+                                {
+                                    app['models'].map((model) => (
+                                        <ListItemButton
+                                            className="sub-menu-item"
+                                            key={model.name}
+                                            sx={{ pl: 4, justifyContent: conditionalStyle((open ? 'start' : 'center'), "start") }}
+                                            component={RouterLink}
+                                            to={`/${app.app_label}/${model.name}/changelist/`}
+                                        >
+                                            <ListItemIcon
+                                                sx={{
+                                                    mr: conditionalStyle((open ? theme.spacing(3) : 'auto'),
+                                                        theme.spacing(3))
+                                                }}>
+                                                <span className="dot"></span>
+                                            </ListItemIcon>
+                                            <ListItemText primary={model.name} />
+                                        </ListItemButton>
+                                    ))
+                                }
+                            </List>
+                        </Collapse>) : null}
+                    </ListItem>))}
+                </SidebarApplicationList>
         }
     </>);
 };

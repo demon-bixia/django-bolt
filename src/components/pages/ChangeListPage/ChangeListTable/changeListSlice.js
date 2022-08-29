@@ -12,7 +12,6 @@ export const fetchChangelistData = createAsyncThunk('changelist/fetchChangelistD
     }
 });
 
-
 export const performAction = createAsyncThunk('changelist/performAction', async ({ url, action, selectedIds = [], selectAcross, csrfToken }, { rejectWithValue }) => {
     try {
         const response = await client.post(url, { "selected_ids": selectedIds, action: action, 'select_across': selectAcross }, { headers: { 'X-CSRFToken': csrfToken } });
@@ -162,7 +161,6 @@ export const changeListSlice = createSlice({
                     state.config = action.payload.config;
                     state.columns = constructColumns(action.payload);
                     [state.rows, state.changeUrls] = constructRows(action.payload);
-
                     state.pageSize = action.payload.config.list_per_page;
                 }
 
@@ -173,7 +171,6 @@ export const changeListSlice = createSlice({
 });
 
 // Selectors
-// status
 export const selectChangeListData = state => ({
     status: state.changelist.status,
     rowsStatus: state.changelist.rowsStatus,

@@ -19,7 +19,6 @@ const LinkRenderer = ({ value, id, tabIndex }) => {
             {value}
         </Link>
     );
-
 };
 
 export default LinkRenderer;

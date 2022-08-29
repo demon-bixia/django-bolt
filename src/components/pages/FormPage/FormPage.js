@@ -52,7 +52,7 @@ const FormPage = () => {
 
     return (
         <Box>
-            <FormHeader action={action} />
+            <FormHeader action={action} objectId={objectId} />
             {
                 status === 'success' && !skeletonAnimationDelay
                     ? (

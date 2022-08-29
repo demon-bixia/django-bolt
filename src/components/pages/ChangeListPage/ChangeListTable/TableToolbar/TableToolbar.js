@@ -1,10 +1,9 @@
 import { Link } from "@mui/material";
 import Box from "@mui/material/Box";
-import Button from "@mui/material/Button";
 import FormControl from "@mui/material/FormControl";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import FormLabel from '@mui/material/FormLabel';
-import Listitem from "@mui/material/ListItem";
+import ListItem from "@mui/material/ListItem";
 import ListSubheader from '@mui/material/ListSubheader';
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
@@ -17,6 +16,7 @@ import { styled, useTheme } from "@mui/system";
 import FeatherIcon from "feather-icons-react";
 import { useState } from "react";
 import SearchField from "../../../../forms/fields/SearchField";
+import ToolbarFilterButton from "../../../../utils/ToolbarFilterButton";
 
 
 const ChevronDown = () => {
@@ -56,33 +56,6 @@ const ToolbarActionWrap = styled(Box)(({ theme }) => ({
     [theme.breakpoints.down("md")]: {
         flexGrow: 1,
         width: '100%',
-    },
-}));
-
-
-const ToolbarFilterButton = styled(Button)(({ theme }) => ({
-    borderColor: theme.palette.border,
-    borderRadius: '12px',
-
-    minWidth: '0',
-    width: '49px',
-    height: '49px',
-    marginLeft: theme.spacing(3),
-
-    // some how this changes the active color
-    color: theme.palette.grey[300],
-
-    '&:hover': {
-        borderColor: theme.palette.border,
-        backgroundColor: theme.palette.grey[100],
-    },
-
-    '&:active': {
-        backgroundColor: theme.palette.grey[100],
-    },
-
-    '&:focus': {
-        backgroundColor: theme.palette.grey[100],
     },
 }));
 
@@ -149,7 +122,7 @@ const FilterMenu = ({ open, filters_list, filters, handleChange, anchorEl, handl
                         let name = `filter_by_${filter.title}`;
 
                         return (
-                            <Listitem key={name}>
+                            <ListItem key={name}>
                                 <FormControl>
                                     <FormLabel id={name}>{name.replace(/_/g, ' ')}</FormLabel>
                                     <RadioGroup
@@ -165,7 +138,7 @@ const FilterMenu = ({ open, filters_list, filters, handleChange, anchorEl, handl
                                         }
                                     </RadioGroup>
                                 </FormControl>
-                            </Listitem>
+                            </ListItem>
                         )
                     })
                 }
@@ -293,8 +266,7 @@ const TableToolbar = (props) => {
 
             <FilterMenu open={open} filters_list={props.filters_list} filters={props.filters} handleChange={props.handleFiltersChange} anchorEl={anchorElement} handleClose={handleClose} />
         </>
-
-    )
+    );
 };
 
 

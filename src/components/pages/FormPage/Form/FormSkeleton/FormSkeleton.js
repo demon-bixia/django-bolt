@@ -28,22 +28,7 @@ const FormSkeleton = () => {
                         marginBottom: theme.spacing(5)
                     }}
                 />
-                <LoadingBox
-                    sx={{
-                        width: '100%',
-                        height: '39px',
-                        marginRight: theme.spacing(4),
-                        marginBottom: theme.spacing(5)
-                    }}
-                />
-                <LoadingBox
-                    sx={{
-                        width: '100%',
-                        height: '39px',
-                        marginRight: theme.spacing(4),
-                        marginBottom: theme.spacing(5)
-                    }}
-                />
+
                 <LoadingBox
                     sx={{
                         width: '100%',

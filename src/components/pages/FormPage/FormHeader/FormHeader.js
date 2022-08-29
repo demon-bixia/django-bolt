@@ -6,6 +6,7 @@ import BreadcrumbsNav from "../../../utils/BreadcrumbsNav";
 import { useLocation } from "react-router-dom";
 import WhiteButton from "../../../utils/buttons/WhiteButton";
 import FeatherIcon from "feather-icons-react";
+import { Link as RouterLink } from "react-router-dom";
 
 const FormHeaderWrap = styled(Box)(({ theme }) => ({
     display: 'flex',
@@ -14,7 +15,7 @@ const FormHeaderWrap = styled(Box)(({ theme }) => ({
     marginBottom: theme.spacing(6),
 }));
 
-const FormHeader = ({ action }) => {
+const FormHeader = ({ action, objectId = null }) => {
     const location = useLocation();
     const pathnames = location.pathname.split('/').filter((x) => x);
     const status = useSelector(selectStatus);
@@ -32,7 +33,21 @@ const FormHeader = ({ action }) => {
             }
 
             <>
-                {action === 'change' ? (<WhiteButton endIcon={<FeatherIcon size={16} icon='clock' />}>History</WhiteButton>) : null}
+                {
+                    action === 'change'
+                        ? (
+                            <WhiteButton
+                                endIcon={<FeatherIcon size={16} icon='clock' />}
+                                underline="none"
+                                aria-label={`history`}
+                                component={RouterLink}
+                                to={`/Activity/${objectId}/`}
+                            >
+                                History
+                            </WhiteButton>
+                        )
+                        : null
+                }
             </>
 
         </FormHeaderWrap>

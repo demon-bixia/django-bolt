@@ -4,22 +4,19 @@ import { Route, Routes } from "react-router-dom";
 
 import NotFoundError from "./components/errors/NotFoundError";
 import ChangeListPage from "./components/pages/ChangeListPage"
-import HomePage from "./components/pages/HomePage"
-import IndexPage from "./components/pages/IndexPage"
-import LoginPage from "./components/pages/LoginPage"
+import HomePage from "./components/pages/HomePage";
+import IndexPage from "./components/pages/IndexPage";
+import LoginPage from "./components/pages/LoginPage";
 
 import AuthProvider from "./components/authentication/AuthProvider";
 import AuthRoutes from "./components/authentication/routes/AuthRoutes";
 import ProtectedRoutes from "./components/authentication/routes/ProtectedRoutes";
+import ActivityPage from "./components/pages/ActivityPage";
 
 import TestPage from "./components/forms/TestPage";
 
 import { overrides } from "./application/theme";
 import FormPage from "./components/pages/FormPage";
-
-// Core features:
-// round 2
-// todo create the admin activity/history page.
 
 // Optimizations:
 // todo organize color variables better.
@@ -33,10 +30,9 @@ import FormPage from "./components/pages/FormPage";
 // idea add dashboard and widgets support (e.g charts, lists, bookmarks).
 // idea markdown documentation support.
 // idea add changelist editing.
-// idea add date hierarchy
+// idea add date hierarchy.
 
 const App = () => {
-
     return (<div className="App">
         <ThemeProvider theme={overrides}>
             <CssBaseline />
@@ -49,14 +45,14 @@ const App = () => {
                     <Route element={<ProtectedRoutes />}>
                         <Route path="/" element={<IndexPage />}>
                             <Route path='/' element={<HomePage />} />
+                            <Route path='/Activity/' element={<ActivityPage />} />
+                            <Route path='/Activity/:objectId/' element={<ActivityPage />} />
                             <Route path='/:appLabel/:modelName/:action/' element={<FormPage />} />
                             <Route path='/:appLabel/:modelName/:objectId/:action/' element={<FormPage />} />
                             <Route path='/:appLabel/:modelName/changelist/' element={<ChangeListPage />} />
                         </Route>
                     </Route>
-
                     <Route path='new_dynamic_form/test/:testName' element={<TestPage />} />
-
                     <Route path="*" element={<NotFoundError />} />
                 </Routes>
             </AuthProvider>

@@ -1,13 +1,10 @@
-import Box from '@mui/material/Box';
-import Typography from "@mui/material/Typography";
-import Link from "@mui/material/Link";
-import Paper from "@mui/material/Paper";
 import FeatherIcon from "feather-icons-react";
 import { styled, useTheme } from '@mui/system';
 import React from 'react';
 import { composeMessage } from './utils';
 import moment from "moment";
-
+import { Box, Typography, Paper, Link } from "@mui/material";
+import { Link as RouterLink } from "react-router-dom";
 
 const ActivityBackground = styled(Paper)(({ theme }) => ({
     padding: theme.spacing(5), borderRadius: '16px', minWidth: '350px',
@@ -105,7 +102,7 @@ const ActivityLog = ({ actionList }) => {
                                 {actionList.length > 4
                                     ? (
                                         <ViewAllLink href='#' variant="h6"
-                                            underline='none'>
+                                            underline='none' to="/Activity/" component={RouterLink} aria-label="view all activties">
                                             View all <FeatherIcon icon="arrow-right" size={14} />
                                         </ViewAllLink>
                                     )

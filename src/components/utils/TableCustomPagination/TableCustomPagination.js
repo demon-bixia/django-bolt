@@ -25,14 +25,14 @@ const PaginationActions = (props) => {
         <ChangeListActionWrap>
             <IconButton
                 sx={{ marginLeft: theme.spacing(3) }}
-                onClick={(event) => props.onPageChange(event, 0)}
+                onClick={(event) => props.onPageChange(event, props.page - 1)}
                 disabled={props.count <= props.rowsPerPage || props.page === 0}
             >
                 <FeatherIcon icon="chevron-left" />
             </IconButton>
 
             <IconButton
-                onClick={(event) => props.onPageChange(event, 1)}
+                onClick={(event) => props.onPageChange(event, props.page + 1)}
                 disabled={props.count <= props.rowsPerPage || (props.page + 1) * props.rowsPerPage >= props.count}
             >
                 <FeatherIcon icon="chevron-right" />
@@ -41,10 +41,10 @@ const PaginationActions = (props) => {
     );
 };
 
-const withFilters = (WrappedComponent, filters) => {
+const withProps = (WrappedComponent, props) => {
 
     return (props) => (
-        <WrappedComponent filters={filters} {...props} />
+        <WrappedComponent  {...props} />
     );
 }
 
@@ -61,7 +61,7 @@ const TableCustomPagination = ({ page, counter, pageSize, rowsPerPageOptions, ha
                 rowsPerPageOptions={rowsPerPageOptions}
                 onPageChange={handlePageChange}
                 onRowsPerPageChange={handlePageSizeChange}
-                ActionsComponent={withFilters(PaginationActions, filters)}
+                ActionsComponent={withProps(PaginationActions, { page, counter })}
             />
         </PaginationWrap>
     );

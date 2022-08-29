@@ -3,12 +3,14 @@ import authProviderReducer from "../components/authentication/AuthProvider/authP
 import changeListReducer from "../components/pages/ChangeListPage/ChangeListTable/changeListSlice";
 import indexPageReducer from "../components/pages/IndexPage/indexPageSlice";
 import FormPageReducer from '../components/pages/FormPage/formPageSlice';
+import ActivityReducer from "../components/pages/ActivityPage/activityPageSlice";
 
 const rootReducer = combineReducers({
     auth: authProviderReducer,
     index: indexPageReducer,
     changelist: changeListReducer,
     form: FormPageReducer,
+    activity: ActivityReducer,
 });
 
 export const setupStore = preloadedState => {

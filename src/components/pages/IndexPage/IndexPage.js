@@ -3,7 +3,7 @@ import { styled } from "@mui/system";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Outlet } from "react-router-dom";
-import { fetchActionList, fetchAppList, selectAllApps, selectStatus } from "./indexPageSlice";
+import { fetchActionList, fetchAppList, selectAllApps, selectStatus, resetIndexPage } from "./indexPageSlice";
 import Sidebar from "./Sidebar";
 import Topbar from "./Topbar";
 import NetworkError from '../../errors/NetworkError';
@@ -35,6 +35,10 @@ const IndexPage = (props) => {
             dispatch(fetchActionList());
             dispatch(fetchAppList());
         }
+
+        return () => {
+            dispatch(resetIndexPage());
+        };
     }, []);
 
     let content;

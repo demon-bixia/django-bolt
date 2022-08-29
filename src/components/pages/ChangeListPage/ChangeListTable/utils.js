@@ -1,8 +1,7 @@
-import BooleanRenderer from "./BooleanRenderer";
-import LinkRenderer from "./LinkRenderer";
+import BooleanRenderer from "../../../utils/renderers/BooleanRenderer";
+import LinkRenderer from "../../../utils/renderers/LinkRenderer";
 
 // Utils
-
 export const constructColumns = (payload) => {
     let columns = [];
 

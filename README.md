@@ -14,7 +14,6 @@ and <a href="https://github.com/MuhammadSalahAli/django-api-admin">the backend</
 
 ### Resources
 
-* Illustrations: <a href="https://undraw.co/">Undraw</a>
 * Logo tutorial and inspiration: <a href="https://www.youtube.com/watch?v=drUsOJQfFZM&ab_channel=LogosByNick">Logos by
   nick</a>
 * Icon pack: <a href="https://feathericons.com/">Feather icons</a>

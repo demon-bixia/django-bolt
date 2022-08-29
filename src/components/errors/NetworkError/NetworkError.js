@@ -2,7 +2,6 @@ import ErrorMessage from '../ErrorMessage';
 
 
 const NetworkError = () => {
-
     return (
         <ErrorMessage
             code=""
