@@ -29,7 +29,7 @@ test("Submitting null values when allow_null = true", async () => {
     let choiceInput = await screen.findByLabelText('Choice', { selector: 'input' });
     let submitButton = await screen.findByText('submit', { selector: 'button' });
 
-    expect(choiceInput).not.toHaveAttribute('required');
+    expect(choiceInput).toHaveAttribute('required');
 
     // null value
     act(() => {
@@ -47,7 +47,7 @@ test("Submitting null values when default is set", async () => {
     let choiceInput = await screen.findByLabelText('Choice', { selector: 'input' });
     let submitButton = await screen.findByText('submit', { selector: 'button' });
 
-    expect(choiceInput).not.toHaveAttribute('required');
+    expect(choiceInput).toHaveAttribute('required');
 
     // null value
     act(() => {
