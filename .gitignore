@@ -28,3 +28,4 @@ yarn-error.log*
 .idea
 .gitignore
 yarn.lock
+yarn.lock
