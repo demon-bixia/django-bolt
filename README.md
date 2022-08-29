@@ -8,6 +8,9 @@
 
 <br/>
 
+<img src="src/assets/vectors/cover.svg" style="width:100%; height:500px;">
+
+
 ### About
 
 <p>
