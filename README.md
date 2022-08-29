@@ -1,7 +1,5 @@
 <div style="padding:10px;">
 
-<img src="src/assets/vectors/cover.svg" style="width:100%; height:500px;">
-
 <br/>
 
 > :warning: This project is not meant to be used in production and there wont be any future releases.  
