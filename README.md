@@ -63,6 +63,14 @@ MIDDLEWARE = [
 ]
 ```
 
+<p>include django-api-admin admin urls.</p>
+
+```python
+urlpatterns = [
+    path('api_admin/', site.urls),
+]
+```
+
 <p>Add these CORS and CSRF settings to you settings.py file</p>
 
 ```python
@@ -77,6 +85,17 @@ CORS_ALLOW_CREDENTIALS = True
 # to allow cross-domain requests from our frontend
 CSRF_TRUSTED_ORIGINS = ['localhost:3000']
 ```
+
+<p>register your models using django_api_admin</p>
+
+```python
+from django_api_admin.sites import site
+from .models import Author, Book
+
+site.register(Author)
+site.register(Book)
+```
+
 
 <p>Now clone or download this repo.</p>
 
