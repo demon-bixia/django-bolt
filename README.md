@@ -2,7 +2,7 @@
 
 <br/>
 
-> :warning: This project is not meant to be used in production and there wont be any future releases.  
+> :warning: This project is currently under development and is not yet ready for production.
 
 <br/>
 
