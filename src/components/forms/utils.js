@@ -285,7 +285,7 @@ export const getRequestData = (serializerFields, values) => {
             data.append(key, value);
         }
     } else {
-        data = newValues;
+        data = { 'data': newValues };
     }
 
     return [data, headers];
