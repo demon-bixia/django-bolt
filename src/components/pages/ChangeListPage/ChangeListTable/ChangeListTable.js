@@ -1,10 +1,9 @@
-import Box from "@mui/material/Box";
 import debounce from 'lodash.debounce';
 import { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from "react-redux";
+import { useParams } from 'react-router-dom';
+
 import { selectCsrfToken } from "../../../authentication/AuthProvider";
-import MessageSnackBar from "../../../utils/alerts/MessageSnackBar";
-import TablePagination from "../../../utils/TableCustomPagination";
 import { selectAlertInfo, setAlertInfo } from "../../FormPage/formPageSlice";
 import {
     closeAlert,
@@ -16,11 +15,16 @@ import {
     setSelectionModel,
     setSorting
 } from "./changeListSlice";
+
+import Box from "@mui/material/Box";
+import Table from "../../../utils/Table";
+import TablePagination from "../../../utils/TableCustomPagination";
+import MessageSnackBar from "../../../utils/alerts/MessageSnackBar";
 import LoadingOverlay from "../../../utils/overlays/LoadingOverlay";
 import TableEmptyOverlay from "../../../utils/overlays/TableEmptyOverlay";
 import TableLoadingSkeleton from "./TableLoadingSkeleton";
 import TableToolbar from "./TableToolbar";
-import Table from "../../../utils/Table";
+
 
 const ChangeListTable = ({ model }) => {
     // forms state
@@ -31,6 +35,9 @@ const ChangeListTable = ({ model }) => {
 
     // csrfToken used for post requests
     const csrfToken = useSelector(selectCsrfToken);
+
+    // used to construct urls
+    const { appLabel, modelName } = useParams();
 
     // changelist data
     const {
@@ -119,7 +126,7 @@ const ChangeListTable = ({ model }) => {
         // if the table is empty fetch the table data.
         if (status === 'idle') {
             dispatch(fetchChangelistData({
-                url: model.changelist_url,
+                url: `/${appLabel}/${modelName.slice(0, -1).toLowerCase()}/changelist/`,
                 page: page + 1,
                 all: pageSize === config.list_max_show_all
             }));
@@ -130,7 +137,7 @@ const ChangeListTable = ({ model }) => {
             // update rows if rows are not updated
             if (rowsStatus === 'notUpdated') {
                 dispatch(fetchChangelistData({
-                    url: model.changelist_url,
+                    url: `/${appLabel}/${modelName.slice(0, -1).toLowerCase()}/changelist/`,
                     page: page + 1,
                     all: pageSize === config.list_max_show_all,
                     rowsOnly: true,

@@ -13,7 +13,7 @@
 
 <p>
 Django bolt is a django admin theme built with React using Material-ui
-components. The proejct aims to create a modern administration interface
+components. The project aims to create a modern administration interface
 while maintaining the old django.contrib.admin api.
 Django bolt is split into two parts: <a href="https://github.com/demon-bixia/django-bolt">the fronted</a> 
 and <a href="https://github.com/demon-bixia/django-api-admin">the backend</a>.

@@ -5,7 +5,7 @@ import { selectCsrfToken } from "../../authentication/AuthProvider";
 import { getChangeValue, getRequestData, getStartingValues, getCurrentValues } from "../utils";
 
 // a form component that fetches fields dynamically from the server and manages their state.
-const DynamicForm = forwardRef(({ url, method = "post", FormComponent, formFields = null, ...props }, ref) => {
+const DynamicForm = forwardRef(({ url, method = "post", FormComponent, formFields = null, wrap = true, ...props }, ref) => {
     const [status, setStatus] = useState('idle');
     const [serializerFields, setSerializerFields] = useState([]);
     const [values, setValues] = useState({});
@@ -38,7 +38,7 @@ const DynamicForm = forwardRef(({ url, method = "post", FormComponent, formField
         event.preventDefault();
         return (async () => {
             try {
-                const [data, headers] = getRequestData(serializerFields, values);
+                const [data, headers] = getRequestData(serializerFields, values, wrap);
                 const response = await client[method.toLowerCase()](url, data, {
                     headers: {
                         ...headers,

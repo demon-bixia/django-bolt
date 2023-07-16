@@ -195,7 +195,7 @@ export const getChangeValue = (event, field = null) => {
 
 // get the request data and headers appropriate for the serializerFields
 // i.e if there is a file field use multipart/form-data else json
-export const getRequestData = (serializerFields, values) => {
+export const getRequestData = (serializerFields, values, wrap = true) => {
     let headers = { 'Content-Type': 'application/json' };
     let newValues = { ...values };
     let data;
@@ -266,8 +266,6 @@ export const getRequestData = (serializerFields, values) => {
         }
     }
 
-
-
     // check if there are file fields and set content type to multipart/form-data.
     for (let serializerField of serializerFields) {
         if (['JSONField'].includes(serializerField.type)) {
@@ -285,7 +283,11 @@ export const getRequestData = (serializerFields, values) => {
             data.append(key, value);
         }
     } else {
-        data = { 'data': newValues };
+        if (wrap) {
+            data = { 'data': newValues };
+        } else {
+            data = newValues;
+        }
     }
 
     return [data, headers];

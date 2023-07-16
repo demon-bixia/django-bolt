@@ -17,7 +17,7 @@ const LoginPage = () => {
 
     return (
         <Layout component="main">
-            <DynamicForm url='/login/' FormComponent={LoginForm} />
+            <DynamicForm url='/login/' FormComponent={LoginForm} wrap={false} />
         </Layout>
     );
 };

@@ -21,8 +21,8 @@ export const constructRows = (actionList) => {
         user: action.user.username,
         object_id: action.object_id,
         object_repr: action.object_repr,
-        action: actionNameMapping[action.action_flag],
         message: composeMessage(action),
+        action: actionNameMapping[action.action_flag],
         time: moment(action.action_time).format('YYYY/MM/DD hh:mm:ss A'),
     }));
 };
