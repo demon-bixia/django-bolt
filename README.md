@@ -1,11 +1,5 @@
 <div style="padding:10px;">
 
-<br/>
-
-> :warning: This project is currently under development and is not yet ready for production.
-
-<br/>
-
 <img src="src/assets/vectors/cover.svg" style="width:100%; height:500px;">
 
 
